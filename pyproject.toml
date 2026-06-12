@@ -51,9 +51,9 @@ colorama = ">=0.4.6"
 
 # Development dependencies
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.18.2"  # Static type checker
+mypy = ">=2.0.2"  # Static type checker
 pathlib = ">=1.0"
-pylint = "^4.0"
+pylint = ">=4.0"
 
 # Test dependencies
 [tool.poetry.group.test.dependencies]
