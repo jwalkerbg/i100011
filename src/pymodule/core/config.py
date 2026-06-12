@@ -158,7 +158,7 @@ class Config:
             config_file = self.load_toml(file_path=file_path)
             validate(instance=config_file, schema=self.CONFIG_SCHEMA)
         except ValidationError as e:
-            raise ValidationError(f"Configuration file validation error: {e}")
+            raise ValidationError(f"Configuration file validation error: {e}") from e
         except Exception as e:
             raise e
 
@@ -242,7 +242,9 @@ class Config:
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments, including nested options for mqtt and MS Protocol."""
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, description='My CLI App with Config File and Overrides', epilog='Priority: (lowest) defaults -> config file -> environment variables -> CLI options (highest)')
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
+                                     description='My CLI App with Config File and Overrides',
+                                     epilog='Priority: (lowest) defaults -> config file -> environment variables -> CLI options (highest)')
 
     # -------------------
     # General options

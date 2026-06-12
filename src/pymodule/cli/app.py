@@ -2,7 +2,6 @@
 
 from importlib.metadata import version as pkg_version
 
-import pymodule
 from pymodule.core.config import get_app_configuration
 from pymodule.logger import get_app_logger, setup_logging
 from pymodule.core.app_runner import run_app

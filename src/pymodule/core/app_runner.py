@@ -28,4 +28,3 @@ def run_app(cfg:Config) -> None:
         raise e
     finally:
         logger.info("Exiting run_app")
-
