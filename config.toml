@@ -1,0 +1,16 @@
+# config.toml
+
+# Sample of parameters in the program
+[parameters]
+param1 = 11
+param2 = 22
+
+[positionals]
+input_file = "input_from_config.txt"
+output_file = "output_from_config.txt"
+
+[logging]
+verbose = 3
+log_prefix = true
+use_color = true
+use_string_handler = false
