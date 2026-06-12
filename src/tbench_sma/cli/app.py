@@ -2,9 +2,9 @@
 
 from importlib.metadata import version as pkg_version
 
-from pymodule.core.config import get_app_configuration
-from pymodule.logger import get_app_logger, setup_logging
-from pymodule.core.app_runner import run_app
+from tbench_sma.core.config import get_app_configuration
+from tbench_sma.logger import get_app_logger, setup_logging
+from tbench_sma.core.app_runner import run_app
 
 logger = get_app_logger(__name__)
 
@@ -21,8 +21,8 @@ def main() -> None:
         if cfg.config['logging']['version_option']:
             # Step 3a: Show version information
             logger.info("Version information requested")
-            app_version = pkg_version("pymodule")
-            print(f"pymodule {app_version}")
+            app_version = pkg_version("tbench_sma")
+            print(f"tbench_sma {app_version}")
         else:
             # Step 3b: Run the application with the collected configuration
             run_app(cfg)

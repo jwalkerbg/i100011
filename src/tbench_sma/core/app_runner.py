@@ -2,9 +2,9 @@
 
 from importlib.metadata import version as pkg_version
 
-import pymodule
-from pymodule.core.config import Config
-from pymodule.logger import get_app_logger
+import tbench_sma
+from tbench_sma.core.config import Config
+from tbench_sma.logger import get_app_logger
 
 logger = get_app_logger(__name__)
 
@@ -14,13 +14,13 @@ def run_app(cfg:Config) -> None:
         # Add real application code here.
         logger.info("Running run_app")
         logger.info("config = %s",str(cfg.config))
-        pymodule.hello_from_core_module_a()
-        pymodule.goodbye_from_core_module_a()
-        pymodule.hello_from_core_module_b()
-        pymodule.goodbye_from_core_module_b()
-        pymodule.hello_from_utils()
-        pymodule.hello_from_ina236()
-        pymodule.hello_from_ina236()
+        tbench_sma.hello_from_core_module_a()
+        tbench_sma.goodbye_from_core_module_a()
+        tbench_sma.hello_from_core_module_b()
+        tbench_sma.goodbye_from_core_module_b()
+        tbench_sma.hello_from_utils()
+        tbench_sma.hello_from_ina236()
+        tbench_sma.hello_from_ina236()
 
     except ValueError as e:
         raise e

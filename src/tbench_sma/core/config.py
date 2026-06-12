@@ -6,7 +6,7 @@ from typing import Dict, Any, Mapping, TypedDict
 import argparse
 from jsonschema import validate, ValidationError
 
-from pymodule.logger import get_app_logger
+from tbench_sma.logger import get_app_logger
 
 logger = get_app_logger(__name__)
 
@@ -48,7 +48,7 @@ class Config:
 
     DEFAULT_CONFIG: ConfigDict = {
         'template': {
-            'template_name': "pymodule",
+            'template_name': "tbench_sma",
             'template_version': "4.1.0",
             'template_description': { 'text': """Template with CLI interface, configuration options in a file, logger and unit tests""", 'content-type': "text/plain" }
         },
@@ -196,12 +196,12 @@ class Config:
         """
         env_overrides = {
             "parameters": {
-                "param1": os.getenv("PYMODULE_PARAM1"),
-                "param2": os.getenv("PYMODULE_PARAM2")
+                "param1": os.getenv("TBENCH_SMA_PARAM1"),
+                "param2": os.getenv("TBENCH_SMA_PARAM2")
             },
             "positionals": {
-                "input_file": os.getenv("PYMODULE_INPUT_FILE"),
-                "output_file": os.getenv("PYMODULE_OUTPUT_FILE")
+                "input_file": os.getenv("TBENCH_SMA_INPUT_FILE"),
+                "output_file": os.getenv("TBENCH_SMA_OUTPUT_FILE")
             }
         }
         self.deep_update(config=self.config, config_file=env_overrides)

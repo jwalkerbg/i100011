@@ -2,7 +2,7 @@
 
 import unittest
 
-from pymodule import drivers
+from tbench_sma import drivers
 
 class TestDrivers(unittest.TestCase):
     def test_hello_from_ina236(self):

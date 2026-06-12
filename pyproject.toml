@@ -1,25 +1,25 @@
 [tool.poetry]
-name = "pymodule"
+name = "tbench_sma"
 version = "0.1.0"
 description = "A sample project driven by poetry, using C and Cython extensions"
 license = "MIT"
 authors = ["Ivan Cenov <i_cenov@botevgrad.com>"]
 repository = "https://github.com/jwalkerbg/i100007.git"
 readme = "README.md"
-packages = [{include = "pymodule", from = "src"}]
+packages = [{include = "tbench_sma", from = "src"}]
 # Additional files that should be added to sdist and wheel distributions.
 include = [
     "pyproject.toml",
     "build.py",
     "README.md",
-    "src/pymodule/**"
+    "src/tbench_sma/**"
 ]
 exclude = [
     # Exclude intermediate C and html files from Cython extensions
-    "src/pymodule/extensions/hello_world/hello_world.c",
-    "src/pymodule/extensions/hello_world/hello_world.html",
-    "src/pymodule/extensions/worker/worker.c",
-    "src/pymodule/extensions/worker/worker.html"
+    "src/tbench_sma/extensions/hello_world/hello_world.c",
+    "src/tbench_sma/extensions/hello_world/hello_world.html",
+    "src/tbench_sma/extensions/worker/worker.c",
+    "src/tbench_sma/extensions/worker/worker.html"
 ]
 
 # Custom package indexes to take precedency over official https://pypi.org/simple
@@ -63,14 +63,14 @@ pytest-mock = ">=3.0.0"
 
 # CLI entry points
 [tool.poetry.scripts]
-pymodule = "pymodule.cli.app:main"
+tbench_sma = "tbench_sma.cli.app:main"
 
 # Definitions, specific for this project.
 [tool.build.config]
 # path where Cython and C extensions live, each extension in a separate directory
-extensions_path = "src/pymodule/extensions"
+extensions_path = "src/tbench_sma/extensions"
 # directories where C extensions can search for C header files
-include_dirs = ["src/pymodule/include", "src/include"]
+include_dirs = ["src/tbench_sma/include", "src/include"]
 # This specifies the name of the libraries to link against, without the lib prefix or file extension.
 # Example: If you have a shared library named `libmylib.so` (Linux) or `mylib.dll` (Windows), you would specify libraries=["mylib"].
 libraries = []
@@ -120,7 +120,7 @@ exclude = [
     "dist/.*",
     "venv/.*",
     ".venv/.*",
-    "src/pymodule/extensions/.*",
+    "src/tbench_sma/extensions/.*",
     "www/*"
 ]
 # --- Plugin support (Flask, Pydantic, etc.) ---
@@ -162,7 +162,7 @@ ignored-classes = ["ABC"]
 
 [tool.pylint.master]
 # Files/directories to ignore
-ignore = ["tests", "build", "venv", ".venv", "dist", "src/pymodule/extensions", "www"]
+ignore = ["tests", "build", "venv", ".venv", "dist", "src/tbench_sma/extensions", "www"]
 jobs = 0  # auto-detect CPU cores for parallel linting
 
 [tool.pylint.reports]
@@ -284,7 +284,7 @@ omit = [
     "*/__init__.py",
     "*/tests/*",
     "build.py",
-    "src/pymodule/extensions/*"
+    "src/tbench_sma/extensions/*"
 ]
 
 [tool.coverage.report]

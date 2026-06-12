@@ -1,7 +1,7 @@
 # test_core_module_b.py
 
 import unittest
-from pymodule import core
+from tbench_sma import core
 
 class TestcoreB(unittest.TestCase):
     def test_hello_from_core_module_b(self):

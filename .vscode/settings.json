@@ -5,6 +5,6 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "files.associations": {
-        "pymodule.h": "c"
+        "tbench_sma.h": "c"
     }
 }

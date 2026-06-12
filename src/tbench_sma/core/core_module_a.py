@@ -1,6 +1,6 @@
 # core/core_module_a.py
 
-from pymodule.logger import get_app_logger
+from tbench_sma.logger import get_app_logger
 
 logger = get_app_logger(__name__)
 

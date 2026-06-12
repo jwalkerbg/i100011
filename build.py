@@ -89,7 +89,7 @@ def build_cython_extensions():
         c_files = [file for pattern in patterns for file in subdir.rglob(pattern)]
         if not c_files:
             continue
-        ext_name = f"pymodule.extensions.{subdir.name}.{subdir.name}"
+        ext_name = f"tbench_sma.extensions.{subdir.name}.{subdir.name}"
         extensions.append(
             Extension(
                 ext_name,
