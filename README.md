@@ -55,10 +55,6 @@ src
             config.py
             core_module_a.py
             core_module_b.py
-        drivers
-            # driver files, can be in subdirectories
-            __init__.py
-            ina236.py       # exaple driver module; can have separate diretories for drivers
         include   # directory for headers, specific pymodule, used by C extensions (and Cython extensions?)
         logger
             # application logger
