@@ -41,7 +41,7 @@ python = ">=3.12"
 cython = ">=3.0"
 setuptools = ">=68.0.0"
 tomli = { version = "*", markers = "python_version < '3.11'" }
-numpy = ">= 2.2"
+numpy = ">= 2.4"
 importlib = ">= 1.0.4"
 paho-mqtt = ">= 2.1.0"
 jsonschema = ">= 4.25"
