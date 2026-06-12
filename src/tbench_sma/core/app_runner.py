@@ -19,8 +19,6 @@ def run_app(cfg:Config) -> None:
         tbench_sma.hello_from_core_module_b()
         tbench_sma.goodbye_from_core_module_b()
         tbench_sma.hello_from_utils()
-        tbench_sma.hello_from_ina236()
-        tbench_sma.hello_from_ina236()
 
     except ValueError as e:
         raise e
