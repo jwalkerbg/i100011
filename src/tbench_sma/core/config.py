@@ -28,19 +28,21 @@ class LoggingConfig(TypedDict, total=False):
     use_string_handler: bool
     version_option: bool
 
-class ParametersConfig(TypedDict, total=False):
-    param1: int
-    param2: int
+class MqttmsConfig(TypedDict, total=False):
+    mqtt: Dict[str, Any]
+    ms: Dict[str, Any]
 
-class PositionalsConfig(TypedDict, total=False):
-    input_file: str
-    output_file: str
+class DutConfig(TypedDict, total=False):
+    ident: str
+    name: str
+    serial_date: str
+    serialn: str
+    serial_separator: str
+
 
 class ConfigDict(TypedDict):
     template: TemplateConfig
     logging: LoggingConfig
-    parameters: ParametersConfig
-    positionals: PositionalsConfig
 
 class Config:
     def __init__(self) -> None:
@@ -59,13 +61,30 @@ class Config:
             'use_string_handler': False,
             'version_option': False
         },
-        'parameters': {
-            'param1': 1,
-            'param2': 2
+        'mqttms': {
+            'mqtt': {
+                'host': 'localhost',
+                'port': 1883,
+                'username': 'guest',
+                'password': 'guest',
+                'client_id': 'mqttx_93919c20',
+                "timeout": 15.0,
+                "long_payload": 25
+            },
+            'ms': {
+                'client_uuid': 'e6f87d77-4216-4be1-ab83-b5fa6792b747',
+                'server_uuid': '4fdc0d1f-2421-4b5b-975b-9b4d0a08d712',
+                'cmd_topic': '@/server_uuid/CMD/format',
+                'rsp_topic': '@/client_uuid/RSP/format',
+                'timeout': 5.0
+            }
         },
-        'positionals': {
-            'input_file': '',
-            'output_file': ''
+        "dut": {
+            "ident": "999999",
+            "name": "device",
+            "serial_date": "2501",
+            "serialn": "0000001",
+            "serial_separator": "-"
         }
     }
 
@@ -97,29 +116,46 @@ class Config:
                 },
                 "additionalProperties": False
             },
-            "parameters": {
+            "mqttms": {
                 "type": "object",
                 "properties": {
-                    "param1": {
-                        "type": "number"
+                    "mqtt": {
+                        "type": "object",
+                        "properties": {
+                            "host": {"type": "string"},
+                            "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+                            "username": {"type": "string"},
+                            "password": {"type": "string"},
+                            "client_id": {"type": "string"},
+                            "timeout": {"type": "number"},
+                            "long_payload": {"type": "integer", "minimum": 10, "maximum": 32768}
+                        },
+                        "required": ["host", "port"]
                     },
-                    "param2": {
-                        "type": "number"
+                    "ms": {
+                        "type": "object",
+                        "properties": {
+                            "client_uuid": {"type": "string"},
+                            "server_uuid": {"type": "string"},
+                            "cmd_topic": {"type": "string"},
+                            "rsp_topic": {"type": "string"},
+                            "timeout": {"type": "number"}
+                        },
+                        "required": ["client_uuid", "server_uuid", "cmd_topic", "rsp_topic", "timeout"]
                     }
                 },
+                "required": ["mqtt", "ms"],
                 "additionalProperties": False
             },
-            "positionals": {
+            "dut" :{
                 "type": "object",
                 "properties": {
-                    "input_file": {
-                        "type": "string"
-                    },
-                    "output_file": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": False
+                    "ident": { "type": "string"},
+                    "name": { "typ": "string" },
+                    "serial_date": { "type": "string"},
+                    "serialn": { "type": "string"},
+                    "serial_separator": { "type": "string" }
+                }
             }
         },
         "additionalProperties": False
@@ -195,14 +231,7 @@ class Config:
         :return: Updated configuration dictionary
         """
         env_overrides = {
-            "parameters": {
-                "param1": os.getenv("TBENCH_SMA_PARAM1"),
-                "param2": os.getenv("TBENCH_SMA_PARAM2")
-            },
-            "positionals": {
-                "input_file": os.getenv("TBENCH_SMA_INPUT_FILE"),
-                "output_file": os.getenv("TBENCH_SMA_OUTPUT_FILE")
-            }
+
         }
         self.deep_update(config=self.config, config_file=env_overrides)
 
@@ -226,17 +255,46 @@ class Config:
             if config_cli.use_string_handler is not None:
                 self.config['logging']['use_string_handler'] = config_cli.use_string_handler
 
-            # sample parameters that should be changed in real applications
-            if config_cli.param1 is not None:
-                self.config['parameters']['param1'] = config_cli.param1
-            if config_cli.param2 is not None:
-                self.config['parameters']['param2'] = config_cli.param2
+        # Handle MQTT CLI overrides
+            if config_cli.mqtt_host is not None:
+                self.config['mqttms']['mqtt']['host'] = config_cli.mqtt_host
+            if config_cli.mqtt_port is not None:
+                self.config['mqttms']['mqtt']['port'] = config_cli.mqtt_port
+            if config_cli.mqtt_username is not None:
+                self.config['mqttms']['mqtt']['username'] = config_cli.mqtt_username
+            if config_cli.mqtt_password is not None:
+                self.config['mqttms']['mqtt']['password'] = config_cli.mqtt_password
+            if config_cli.mqtt_client_id is not None:
+                self.config['mqttms']['mqtt']['client_id'] = config_cli.mqtt_client_id
+            if config_cli.mqtt_timeout is not None:
+                self.config['mqttms']['mqtt']['timeout'] = config_cli.mqtt_timeout
+            if config_cli.long_payload is not None:
+                self.config['mqttms']['mqtt']['long_payload'] = config_cli.long_payload
 
-            # positional parameters
-            if hasattr(config_cli, 'input_file') and config_cli.input_file is not None:
-                self.config['positionals']['input_file'] = config_cli.input_file
-            if hasattr(config_cli, 'output_file') and config_cli.output_file is not None:
-                self.config['positionals']['output_file'] = config_cli.output_file
+            # handle ms protocol overrides
+            if config_cli.ms_client_uuid is not None:
+                self.config['mqttms']['ms']['client_uuid'] = config_cli.ms_client_uuid
+            if config_cli.ms_server_uuid is not None:
+                self.config['mqttms']['ms']['server_uuid'] = config_cli.ms_server_uuid
+            if config_cli.ms_cmd_topic is not None:
+                self.config['mqttms']['ms']['cmd_topic'] = config_cli.ms_cmd_topic
+            if config_cli.ms_rsp_topic is not None:
+                self.config['mqttms']['ms']['rsp_topic'] = config_cli.ms_rsp_topic
+            if config_cli.ms_timeout is not None:
+                self.config['mqttms']['ms']['timeout'] = config_cli.ms_timeout
+
+            # dut options
+            if config_cli.dut_ident is not None:
+                self.config['dut']['ident'] = config_cli.dut_ident
+            if config_cli.dut_name is not None:
+                self.config['dut']['name'] = config_cli.dut_name
+            if config_cli.dut_serial_date is not None:
+                self.config['dut']['serial_date'] = config_cli.dut_serial_date
+            if config_cli.dut_serialn is not None:
+                self.config['dut']['serialn'] = config_cli.dut_serialn
+            if config_cli.serial_separator is not None:
+                self.config['dut']['serial_separator'] = config_cli.serial_separator
+
 
         return self.config
 
@@ -329,15 +387,32 @@ def parse_args() -> argparse.Namespace:
         help="Disable string handler to store logs in an internal buffer"
     )
 
-
     # application options & parameters
-    param_group = parser.add_argument_group("Parameters")
-    param_group.add_argument('--param1', dest='param1', type=int, help="Parameter1")
-    param_group.add_argument('--param2', dest='param2', type=int, help="Parameter2")
+    # MQTT options
+    mqtt_group = parser.add_argument_group('MQTT Options')
+    mqtt_group.add_argument('--mqtt-host', type=str, help='MQTT host to connect to')
+    mqtt_group.add_argument('--mqtt-port', type=int, help='MQTT port')
+    mqtt_group.add_argument('--mqtt-username', type=str, help='MQTT username')
+    mqtt_group.add_argument('--mqtt-password', type=str, help='MQTT password')
+    mqtt_group.add_argument('--mqtt-client-id', type=str, help="MQTT Client ID, used by the broker")
+    mqtt_group.add_argument("--mqtt-timeout", type=float, help="Timeout to wait connection or other activity in MQTT handler.")
+    mqtt_group.add_argument("--mqtt-lp", type=int, dest='long_payload', help="Determines threshold of long payloads. When they are longer that this value, a short string is logged instead of real payloads. --verbose makes real payloads to be logged always.")
 
-    positional_group = parser.add_argument_group("Parameters")
-    positional_group.add_argument('input_file', type=str, nargs="?", help="Input file")
-    positional_group.add_argument('output_file', type=str, nargs="?", help="Output file")
+    # ms protocol
+    ms_group = parser.add_argument_group('MS Protocol Options')
+    ms_group.add_argument("--ms-client_uuid", type=str, dest='ms_client_uuid', help="UUID of the client (master side).")
+    ms_group.add_argument("--ms-server_uuid", type=str, dest='ms_server_uuid', help="UUID of the server (slave side).")
+    ms_group.add_argument("--ms-cmd-topic", type=str, dest='ms_cmd_topic', help="Template of command topic.")
+    ms_group.add_argument("--ms-rsp-topic", type=str, dest='ms_rsp_topic', help="Template of response topic.")
+    ms_group.add_argument("--ms-timeout", type=float, dest='ms_timeout', help="Timeout used in protocol to wait for response.")
+
+    # dut
+    dut_group = parser.add_argument_group('DUT Data')
+    dut_group.add_argument("--dut-ident", type=str, dest='dut_ident', help="ID Number of Device Under Test")
+    dut_group.add_argument("--dut-name", type=str, dest='dut_name', help="Device name")
+    dut_group.add_argument("--dut-serial-date", type=str, dest='dut_serial_date', help="Date as part of serial number")
+    dut_group.add_argument("--dut-serialn", type=str, dest='dut_serialn', help="Serial number of the Device Under Test")
+    dut_group.add_argument("--dut-sn-separator", type=str, dest='serial_separator', help="Separator string or symbol used to separate parts of the serial number")
 
     return parser.parse_args()
 
@@ -378,3 +453,27 @@ def get_app_configuration() -> Config:
     config_instance.merge_cli_options(args)
 
     return config_instance
+
+def log_configuration(self):
+    logger.info("Running in verbose mode.")
+
+    # MQTT configuration
+    mqtt_config = self.config['mqttms']['mqtt']
+    logger.info("MQTT Configuration:")
+    logger.info("  Host: %s",mqtt_config['host'])
+    logger.info("  Port: %d",mqtt_config['port'])
+    logger.info("  Username: %s",mqtt_config.get('username', 'N/A'))
+    logger.info("  Password: %s",mqtt_config.get('password', 'N/A'))
+    logger.info("  Client ID: %s",mqtt_config.get('client_id', 'N/A'))
+    logger.info("  Timeout: %d",mqtt_config.get('timeout', 'N/A'))
+    logger.info("  Long payloads threshold: %d",mqtt_config.get('long_payload', 'N/A'))
+
+    ms_config = self.config['mqttms']['ms']
+    logger.info("MS Configuration")
+    logger.info("  Client (master) UUID: %s",ms_config.get('client_uuid', 'N/A'))
+    logger.info("  Server (slave) UUID:  %s",ms_config.get('server_uuid', 'N/A'))
+    logger.info("  Command topic:  %s",ms_config.get('cmd_topic', 'N/A'))
+    logger.info("  Response topic: %s",ms_config.get('rsp_topic', 'N/A'))
+    logger.info("  MS protocol timeout: %f",ms_config.get('timeout', 'N/A'))
+
+    logger.info("Application started with the above configuration...")

@@ -30,10 +30,10 @@ exclude = [
 # This is useful for companies that want to cache packages internally or host private packages.
 # Make sure to configure authentication if your pypi server requires it.
 # See Poetry documentation for more details: https://python-poetry.org/docs/repositories/#using-private-repositories
-# [[tool.poetry.source]]
-# name = "mycompany-pypi"
-# url = "http://pypi.mycompany.com/simple"
-# priority = "primary"
+[[tool.poetry.source]]
+name = "okto7"
+url = "http://pypi.okto7.com/simple"
+priority = "primary"
 
 # Runtime dependencies
 [tool.poetry.dependencies]
@@ -48,6 +48,8 @@ jsonschema = ">= 4.25"
 types-jsonschema = ">= 4.25"
 rfc3986 = ">= 2.0.0"
 colorama = ">=0.4.6"
+prompt-toolkit = ">=3.0"
+mqttms = ">=3.4"
 
 # Development dependencies
 [tool.poetry.group.dev.dependencies]

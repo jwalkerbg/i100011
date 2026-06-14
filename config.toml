@@ -1,16 +1,30 @@
 # config.toml
 
-# Sample of parameters in the program
-[parameters]
-param1 = 11
-param2 = 22
+[mqttms.mqtt]
+host = "broker.emqx.io"                     # MQTT brokr URI
+port = 1883                                 # port
+username = ""                               # username if must log in
+password = ""                               # password if must log in
+client_id = "client_394578"                 # client ID. Must be uinq for earch smartfan installation
+timeout = 30.0                              # timeout in second to wait for reaction (on connection request, subscription etc)
+long_payload = 25                           # payload lenth threshod. Used in logging.
 
-[positionals]
-input_file = "input_from_config.txt"
-output_file = "output_from_config.txt"
+[mqttms.ms]
+client_uuid = "e6f87d77-4216-4be1-ab83-b5fa6792b747"    # Used as identifier of this application running on concrete computer
+server_uuid = "043ac6f0-fdb1-4832-ab96-308c1fb83589"    # UUID of DUT
+cmd_topic = "@/server_uuid/CMD/format"       # template of MS protocol command topic
+rsp_topic = "@/server_uuid/RSP/format"       # template of MS protocol response topic
+timeout = 5.0
 
 [logging]
 verbose = 3
 log_prefix = true
 use_color = true
 use_string_handler = false
+
+[dut]
+ident = "109380"                # identifier ot DUT brand
+name = "Smart Ventilator"       # Human readable name
+serial_date = "2606"            # year and moth or production
+serialn = "0000001"             # serial number
+serial_separator = "-"          # separator  betwennparts of the serial number
