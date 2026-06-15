@@ -15,10 +15,7 @@ def run_app(cfg:Config) -> None:
         # Add real application code here.
         logger.info("Running run_app")
         logger.info("config = %s",str(cfg.config))
-        tbench_sma.hello_from_core_module_a()
-        tbench_sma.goodbye_from_core_module_a()
-        tbench_sma.hello_from_core_module_b()
-        tbench_sma.goodbye_from_core_module_b()
+
         tbench_sma.hello_from_utils()
 
     except ValueError as e:
