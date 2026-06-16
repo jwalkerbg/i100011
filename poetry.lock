@@ -45,8 +45,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "astroid"
@@ -62,8 +62,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "attrs"
@@ -79,8 +79,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "colorama"
@@ -96,8 +96,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "coverage"
@@ -220,8 +220,8 @@ toml = ["tomli ; python_full_version <= \"3.11.0a6\""]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "cython"
@@ -274,8 +274,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "dill"
@@ -295,8 +295,8 @@ profile = ["gprof2dot (>=2022.7.29)"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "importlib"
@@ -311,8 +311,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "iniconfig"
@@ -328,8 +328,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "isort"
@@ -348,8 +348,8 @@ colors = ["colorama"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "jsonschema"
@@ -375,8 +375,8 @@ format-nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "jsonschema-specifications"
@@ -395,8 +395,8 @@ referencing = ">=0.31.0"
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "librt"
@@ -501,8 +501,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "mccabe"
@@ -518,36 +518,36 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "mqttms"
-version = "3.4.1"
+version = "3.5.1.dev1"
 description = "mqttms library to handle MQTT communications and MS protocol master (client) side"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "mqttms-3.4.1-cp314-cp314-win_amd64.whl", hash = "sha256:06f3628a10d947652fd3f0f2b691ba390872d6cfb4eb3f88316d387f6d03a72e"},
-    {file = "mqttms-3.4.1.tar.gz", hash = "sha256:f09db5ae11ac5ae3a878361e1e3ffeece15cf243532827c53eded0aa32e3095d"},
+    {file = "mqttms-3.5.1.dev1-cp314-cp314-win_amd64.whl", hash = "sha256:d3e6502f083e25d3de2f5ecd3f775fc1e75da3bc0fdda40fdc2051fc9fbe124e"},
+    {file = "mqttms-3.5.1.dev1.tar.gz", hash = "sha256:a58b5a11bfdf9cdd5cd3904dac4dea04a4211e59a57a8e0075dfe096de6b2323"},
 ]
 
 [package.dependencies]
 colorama = ">=0.4.6"
 cython = ">=3.0"
 importlib = ">=1.0.4"
-jsonschema = ">=4.25.0"
-numpy = ">=2.2.0"
+jsonschema = ">=4.26.0"
+numpy = ">=2.4.0"
 paho-mqtt = ">=2.1.0"
 rfc3986 = ">=2.0.0"
 setuptools = ">=68.0.0"
-types-jsonschema = ">=4.23.0"
+types-jsonschema = ">=4.26.0"
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "mypy"
@@ -622,8 +622,8 @@ reports = ["lxml"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "mypy-extensions"
@@ -639,8 +639,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "numpy"
@@ -726,8 +726,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "packaging"
@@ -743,8 +743,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "paho-mqtt"
@@ -763,8 +763,8 @@ proxy = ["pysocks"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pathlib"
@@ -780,8 +780,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pathspec"
@@ -802,8 +802,8 @@ re2 = ["google-re2 (>=1.1)"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "platformdirs"
@@ -819,8 +819,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pluggy"
@@ -840,8 +840,8 @@ testing = ["coverage", "pytest", "pytest-benchmark"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "prompt-toolkit"
@@ -860,8 +860,8 @@ wcwidth = "*"
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pygments"
@@ -880,19 +880,19 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pylint"
-version = "4.0.5"
+version = "4.0.6"
 description = "python code static checker"
 optional = false
 python-versions = ">=3.10.0"
 groups = ["dev"]
 files = [
-    {file = "pylint-4.0.5-py3-none-any.whl", hash = "sha256:00f51c9b14a3b3ae08cff6b2cdd43f28165c78b165b628692e428fb1f8dc2cf2"},
-    {file = "pylint-4.0.5.tar.gz", hash = "sha256:8cd6a618df75deb013bd7eb98327a95f02a6fb839205a6bbf5456ef96afb317c"},
+    {file = "pylint-4.0.6-py3-none-any.whl", hash = "sha256:d11a0e1fdb7b1cd46ec5d6fc78fee8b95f28695b2d6140e5809925f61e32ea54"},
+    {file = "pylint-4.0.6.tar.gz", hash = "sha256:52f19191bee08bf103f9705ad1a0ece4aa5a0a4ef2bdcbd969375a1e6f6579d5"},
 ]
 
 [package.dependencies]
@@ -910,19 +910,19 @@ testutils = ["gitpython (>3)"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pytest"
-version = "9.0.3"
+version = "9.1.0"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.10"
 groups = ["test"]
 files = [
-    {file = "pytest-9.0.3-py3-none-any.whl", hash = "sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9"},
-    {file = "pytest-9.0.3.tar.gz", hash = "sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c"},
+    {file = "pytest-9.1.0-py3-none-any.whl", hash = "sha256:8ebb0e7888bdf2bdfc602ec51f8f62d50200af37356c74e503c79a94f5c81f32"},
+    {file = "pytest-9.1.0.tar.gz", hash = "sha256:41dd9148c08072446394cefd3d79701701335a9f4cae69ba92e39f6c7f5c061c"},
 ]
 
 [package.dependencies]
@@ -937,8 +937,8 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pytest-cov"
@@ -962,8 +962,8 @@ testing = ["process-tests", "pytest-xdist", "virtualenv"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "pytest-mock"
@@ -985,8 +985,8 @@ dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "referencing"
@@ -1007,8 +1007,8 @@ typing-extensions = {version = ">=4.4.0", markers = "python_version < \"3.13\""}
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "rfc3986"
@@ -1027,8 +1027,8 @@ idna2008 = ["idna"]
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "rpds-py"
@@ -1172,8 +1172,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "setuptools"
@@ -1198,8 +1198,8 @@ type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.deve
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "tomlkit"
@@ -1215,8 +1215,8 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "types-jsonschema"
@@ -1235,8 +1235,8 @@ referencing = "*"
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "typing-extensions"
@@ -1253,8 +1253,8 @@ markers = {main = "python_version == \"3.12\""}
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [[package]]
 name = "wcwidth"
@@ -1270,10 +1270,10 @@ files = [
 
 [package.source]
 type = "legacy"
-url = "http://pypi.okto7.com/simple"
-reference = "okto7"
+url = "http://pypi.imc.bg/simple"
+reference = "imc.bg"
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "bb09b54f3bad4b8c9a2ab40bc8e8896de54e50de2340823d2d6868e55ec77cb9"
+content-hash = "f60c0c7c6d3063c5b561141baed2b94505a8e6d08725080b53582651d19d3fe7"
