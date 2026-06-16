@@ -1276,4 +1276,4 @@ reference = "imc.bg"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "f60c0c7c6d3063c5b561141baed2b94505a8e6d08725080b53582651d19d3fe7"
+content-hash = "75900169c963991db0501890c0bbb337fb85336f46cd2a48e9dcaeb7619617f5"

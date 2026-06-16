@@ -43,6 +43,10 @@ class DutConfig(TypedDict, total=False):
 class ConfigDict(TypedDict):
     template: TemplateConfig
     logging: LoggingConfig
+    mqttms: MqttmsConfig
+    dut: DutConfig
+    tests: Dict[str, Any]
+    options: Dict[str, Any]
 
 class Config:
     def __init__(self) -> None:
@@ -75,7 +79,16 @@ class Config:
                 'client_uuid': 'e6f87d77-4216-4be1-ab83-b5fa6792b747',
                 'server_uuid': '4fdc0d1f-2421-4b5b-975b-9b4d0a08d712',
                 'cmd_topic': '@/server_uuid/CMD/format',
-                'rsp_topic': '@/client_uuid/RSP/format',
+                'subs_topics': [
+                    {
+                        'topic': '@/server_uuid/RSP/format',
+                        'format': 'ASCIIHEX'
+                    },
+                    {
+                        'topic': '@/server_uuid/USL/format',
+                        'format': 'JSON'
+                    }
+                ],
                 'timeout': 5.0
             }
         },
@@ -85,6 +98,20 @@ class Config:
             "serial_date": "2501",
             "serialn": "0000001",
             "serial_separator": "-"
+        },
+        "tests": {
+            "motoron": 3.0,
+            "motoroff": 1.0
+        },
+        "options": {
+            "mode": "testbench",
+            "monitor_delay": 2.0,
+            "monitor_loops": 10,
+            "dutdelay": 2.0,
+            "interactive": True,
+            "nopairing": False,
+            "noresetwifi": False,
+            "stop_if_failed": False
         }
     }
 
@@ -138,10 +165,28 @@ class Config:
                             "client_uuid": {"type": "string"},
                             "server_uuid": {"type": "string"},
                             "cmd_topic": {"type": "string"},
-                            "rsp_topic": {"type": "string"},
-                            "timeout": {"type": "number"}
+                            "subs_topics": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "topic": {
+                                            "type": "string"
+                                        },
+                                        "format": {
+                                            "type": "string",
+                                            "enum": ["BINARY", "ASCIIHEX", "ASCII", "JSON" ]
+                                        }
+                                    },
+                                    "required": ["topic", "format"],
+                                    "additionalProperties": False
+                                },
+                                "minItems": 1,
+                                "uniqueItems": True
+                            }
                         },
-                        "required": ["client_uuid", "server_uuid", "cmd_topic", "rsp_topic", "timeout"]
+                        "timeout": {"type": "number", "minimum": 0.1, "maximum": 60.0},
+                        "required": ["client_uuid", "server_uuid", "cmd_topic", "subs_topics", "timeout"]
                     }
                 },
                 "required": ["mqtt", "ms"],
@@ -151,10 +196,30 @@ class Config:
                 "type": "object",
                 "properties": {
                     "ident": { "type": "string"},
-                    "name": { "typ": "string" },
+                    "name": { "type": "string" },
                     "serial_date": { "type": "string"},
                     "serialn": { "type": "string"},
                     "serial_separator": { "type": "string" }
+                }
+            },
+            "tests": {
+                "type": "object",
+                "properties": {
+                    "motoron": {"type": "number"},
+                    "motoroff": {"type": "number"}
+                }
+            },
+            "options": {
+                "type": "object",
+                "properties": {
+                    "mode": {"type": "string"},
+                    "monitor_delay": {"type": "number"},
+                    "monitor_loops": {"type": "integer"},
+                    "dutdelay": {"type": "number"},
+                    "interactive": {"type": "boolean"},
+                    "nopairing": {"type": "boolean"},
+                    "noresetwifi": {"type": "boolean"},
+                    "stop_if_failed": {"type": "boolean"}
                 }
             }
         },
@@ -295,8 +360,33 @@ class Config:
             if config_cli.serial_separator is not None:
                 self.config['dut']['serial_separator'] = config_cli.serial_separator
 
+            # test options
+            if config_cli.motoron is not None:
+                self.config['tests']['motoron'] = config_cli.motoron
+            if config_cli.motoroff is not None:
+                self.config['tests']['motoroff'] = config_cli.motoroff
+
+            # operatione options
+            if config_cli.mode is not None:
+                self.config['options']['mode'] = config_cli.mode
+            if config_cli.monitor_delay is not None:
+                self.config['options']['monitor_delay'] = config_cli.monitor_delay
+            if config_cli.monitor_loops is not None:
+                self.config['options']['monitor_loops'] = config_cli.monitor_loops
+            if config_cli.dutdelay is not None:
+                self.config['options']['dutdelay'] = config_cli.dutdelay
+            if config_cli.interactive is not None:
+                self.config['options']['interactive'] = config_cli.interactive
+            if config_cli.nopairing is not None:
+                self.config['options']['nopairing'] = config_cli.nopairing
+            if config_cli.noresetwifi is not None:
+                self.config['options']['noresetwifi'] = config_cli.noresetwifi
+            if config_cli.stop_if_failed is not None:
+                self.config['options']['stop_if_failed'] = config_cli.stop_if_failed
 
         return self.config
+
+valid_modes = ['testbench', 'monitor', 'snonly', 'reset-wifi']
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments, including nested options for mqtt and MS Protocol."""
@@ -413,6 +503,24 @@ def parse_args() -> argparse.Namespace:
     dut_group.add_argument("--dut-serial-date", type=str, dest='dut_serial_date', help="Date as part of serial number")
     dut_group.add_argument("--dut-serialn", type=str, dest='dut_serialn', help="Serial number of the Device Under Test")
     dut_group.add_argument("--dut-sn-separator", type=str, dest='serial_separator', help="Separator string or symbol used to separate parts of the serial number")
+
+    # tests
+    tests_group = parser.add_argument_group('Tests Options')
+    tests_group.add_argument("--motoron", type=float, dest='motoron', help="Time to maintain motor enabled in tests")
+    tests_group.add_argument("--motoroff", type=float, dest='motoroff', help="Time to maintain motor disabled in tests")
+
+    # operative options
+    operative_group = parser.add_argument_group('Operative Options')
+    operative_group.add_argument('--mode', type=str, dest='mode', choices=valid_modes, help='Select mode of operation') # testbench, monitor, sn-only
+    operative_group.add_argument("--monitor-delay", type=float, dest='monitor_delay', help="Interval of refreshing data in monitor mode")
+    operative_group.add_argument("--monitor-loops", type=int, dest='monitor_loops', help="Number of loops in monitor mode")
+    operative_group.add_argument("--dut-delay", type=float, dest='dutdelay', help="Delay after BLE pairing and connecting to MQTT before start of tests driven by MS protocol over MQTT. This time allows DUT to setup WiFi/MQTT connection.")
+    interactive_group = operative_group.add_mutually_exclusive_group()
+    interactive_group.add_argument('--interactive', dest='interactive', action='store_const', const=True, help='Enable interactive mode (default)')
+    interactive_group.add_argument('--no-interactive', dest='interactive', action='store_const', const=False, help='Disable interactive mode')
+    operative_group.add_argument("--no-pairing", dest='nopairing', action='store_const', const=True, help="Do not execute pairing procedure. Assumes DUT has already valid WiFi credentials.")
+    operative_group.add_argument("--no-reset-wifi", dest='noresetwifi', action='store_const', const=True, help="Do not reset WiFi credentials on the DUT")
+    operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
 
     return parser.parse_args()
 

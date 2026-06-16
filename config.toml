@@ -13,8 +13,15 @@ long_payload = 25                           # payload lenth threshod. Used in lo
 client_uuid = "e6f87d77-4216-4be1-ab83-b5fa6792b747"    # Used as identifier of this application running on concrete computer
 server_uuid = "043ac6f0-fdb1-4832-ab96-308c1fb83589"    # UUID of DUT
 cmd_topic = "@/server_uuid/CMD/format"       # template of MS protocol command topic
-rsp_topic = "@/server_uuid/RSP/format"       # template of MS protocol response topic
 timeout = 5.0
+
+[[mqttms.ms.subs_topics]]
+topic = "@/server_uuid/RSP/format"
+format = "ASCIIHEX"
+
+[[mqttms.ms.subs_topics]]
+topic = "@/server_uuid/USL/format"
+format = "JSON"
 
 [logging]
 verbose = 3
@@ -28,3 +35,16 @@ name = "Smart Ventilator"       # Human readable name
 serial_date = "2606"            # year and moth or production
 serialn = "0000001"             # serial number
 serial_separator = "-"          # separator  betwennparts of the serial number
+
+[tests]
+motoron = 3.0           # time to maintain motor in ON state in t_motor test
+motoroff = 1.0          # time to maintain motor in OFF state in t_motor test
+
+[options]
+mode = "testbench"      # select operational mode ("testbench", "snonly", "monitor")
+monitor_delay = 2.0     # interval to refresh data
+monitor_loops = 10      # how many loops to execute monitor. 0 means endless
+dutdelay = 2.0          # Delay in seconds after DIT BLE pairing
+interactive = true      # if false, smartfan uses values from the configuration or options and do not ask at command line for conformation
+nopairing = false       # Skip BLE pairing. Useful for testing already paired devices that have valid WiFi Credentials.
+stop_if_failed = true   # stop testing if some test fails.
