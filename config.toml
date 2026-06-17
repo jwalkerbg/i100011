@@ -11,7 +11,7 @@ long_payload = 25                           # payload lenth threshod. Used in lo
 
 [mqttms.ms]
 client_uuid = "e6f87d77-4216-4be1-ab83-b5fa6792b747"    # Used as identifier of this application running on concrete computer
-server_uuid = "043ac6f0-fdb1-4832-ab96-308c1fb83589"    # UUID of DUT
+server_uuid = "e8a5106c-9b8b-4040-b906-bbc466d2bc1f"    # UUID of DUT
 cmd_topic = "@/server_uuid/CMD/format"       # template of MS protocol command topic
 timeout = 5.0
 
