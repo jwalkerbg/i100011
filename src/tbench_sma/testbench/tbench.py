@@ -77,7 +77,7 @@ class TestBench:
                 logger.error("Cannot subscribe to MQTT broker: %d",res)
                 return
         except Exception as e:
-            logger.error(f"Cannot subscribe to MQTT broker: {e}")
+            logger.error("Cannot subscribe to MQTT broker: %s", e)
             return
         self.ms_host.ms_protocol.set_unsolicited_message_processor(unsolicited_handler_a)
 
