@@ -109,7 +109,7 @@ class Config:
             "monitor_loops": 10,
             "dutdelay": 2.0,
             "interactive": True,
-            "nopairing": False,
+            "pairing": False,
             "noresetwifi": False,
             "stop_if_failed": False
         }
@@ -217,7 +217,7 @@ class Config:
                     "monitor_loops": {"type": "integer"},
                     "dutdelay": {"type": "number"},
                     "interactive": {"type": "boolean"},
-                    "nopairing": {"type": "boolean"},
+                    "pairing": {"type": "boolean"},
                     "noresetwifi": {"type": "boolean"},
                     "stop_if_failed": {"type": "boolean"}
                 }
@@ -377,8 +377,8 @@ class Config:
                 self.config['options']['dutdelay'] = config_cli.dutdelay
             if config_cli.interactive is not None:
                 self.config['options']['interactive'] = config_cli.interactive
-            if config_cli.nopairing is not None:
-                self.config['options']['nopairing'] = config_cli.nopairing
+            if config_cli.pairing is not None:
+                self.config['options']['pairing'] = config_cli.pairing
             if config_cli.noresetwifi is not None:
                 self.config['options']['noresetwifi'] = config_cli.noresetwifi
             if config_cli.stop_if_failed is not None:
@@ -518,7 +518,10 @@ def parse_args() -> argparse.Namespace:
     interactive_group = operative_group.add_mutually_exclusive_group()
     interactive_group.add_argument('--interactive', dest='interactive', action='store_const', const=True, help='Enable interactive mode (default)')
     interactive_group.add_argument('--no-interactive', dest='interactive', action='store_const', const=False, help='Disable interactive mode')
-    operative_group.add_argument("--no-pairing", dest='nopairing', action='store_const', const=True, help="Do not execute pairing procedure. Assumes DUT has already valid WiFi credentials.")
+
+    operative_group.add_argument("--pairing", dest='pairing', action='store_const', const=True, help="Execute pairing procedure. Assumes DUT has no valid WiFi credentials.")
+    operative_group.add_argument("--no-pairing", dest='pairing', action='store_const', const=False, help="Do not execute pairing procedure. Assumes DUT already has valid WiFi credentials.")
+
     operative_group.add_argument("--no-reset-wifi", dest='noresetwifi', action='store_const', const=True, help="Do not reset WiFi credentials on the DUT")
     operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
 

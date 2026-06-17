@@ -36,7 +36,7 @@ def run_app(cfg:Config) -> None:
         tb = TestBench(cfg.config)
 
         # Step 1) BLE binding, exchange WIFi credentials / MAC address
-        if cfg.config['options']['nopairing']:
+        if cfg.config['options']['pairing']:
             if not tb.ble_binding():
                 logger.error("Cannot bind with server via BLE")
                 return
