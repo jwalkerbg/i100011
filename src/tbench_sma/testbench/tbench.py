@@ -41,6 +41,8 @@ class TestBench:
                 (self.t_sensors, "Sensors" ),
                 (self.t_leds, "LEDs" ),
                 (self.t_heater, "Heater" ),
+                (self.t_ionizer, "Ionizer" ),
+                (self.t_ultra_reppeler, "Ultra Repeller" ),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -190,6 +192,30 @@ class TestBench:
         rsp = payload.get("response","")
         if rsp != "OK":
             logger.info(f"Cannot set HEATER to OFF: %s", rsp)
+        return True
+
+    def t_ionizer(self) -> bool:
+        payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.ON)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set IONIZER to ON: %s", rsp)
+        time.sleep(1)
+        payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.OFF)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set IONIZER to OFF: %s", rsp)
+        return True
+
+    def t_ultra_reppeler(self) -> bool:
+        payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.ON)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set ULTRA_REPELLER to ON: %s", rsp)
+        time.sleep(1)
+        payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.OFF)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set ULTRA_REPELLER to OFF: %s", rsp)
         return True
 
     def t_serialn(self) -> bool:
