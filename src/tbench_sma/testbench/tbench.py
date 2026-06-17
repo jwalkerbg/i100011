@@ -7,6 +7,7 @@ import logging
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
+from tbench_sma.definitions import Device, DeviceMode, Led, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 
@@ -38,8 +39,6 @@ class TestBench:
                 (self.t_version, "Version" ),
                 (self.t_testmode, "Test Mode" ),
                 (self.t_sensors, "Sensors" ),
-                (self.t_motor, "Motor" ),
-                #(self.t_led, "Led"),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -157,7 +156,7 @@ class TestBench:
         return False
 
     def t_testmode(self) -> bool:
-        payload = self.ms_host.ms_testmode()
+        payload = self.ms_host.ms_set_mode(DeviceMode.TEST)
         if payload.get("response","") == "OK":
             logger.info("Test mode is set")
             return True
@@ -165,27 +164,7 @@ class TestBench:
         return False
 
     def t_sensors(self) -> bool:
-        sensor_data = self.read_sensors()
-        if sensor_data:
-            logger.info(f"MSH sensor_data = {sensor_data}")
-            self.print_sensor_data(sensor_data)
-            return True
-        logger.info("MSH: No valid data received")
-        return False
-
-    def t_motor(self) -> bool:
-        motoron = self.config.get("tests").get("motoron", 3.0)
-        motoroff = self.config.get("tests").get("motoroff", 1.0)
-        self.ms_host.ms_motor(self.MOT_STOP)
-        time.sleep(motoroff)
-        self.ms_host.ms_motor(self.MOT_PHASE_SLOW)
-        time.sleep(motoron)
-        self.ms_host.ms_motor(self.MOT_STOP)
-        time.sleep(motoroff)
-        self.ms_host.ms_motor(self.MOT_PHASE_FAST)
-        time.sleep(motoron)
-        self.ms_host.ms_motor(self.MOT_STOP)
-        time.sleep(motoroff)
+        payload = self.ms_host.ms_sensors()
         return True
 
     def t_serialn(self) -> bool:
