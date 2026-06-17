@@ -2,6 +2,6 @@
 
 from .devices import Device
 from .modes import DeviceMode
-from .leds import Led
+from .leds import Led, LedOperation
 from .api_commands import ApiCmd
 from .flags import ParFlags, SensorState, OutputState, ConnectivityState
