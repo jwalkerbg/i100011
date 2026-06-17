@@ -1,6 +1,6 @@
 # definitions/devices.py
 
-from enum import IntEnum, IntFlag, StrEnum
+from enum import IntEnum
 
 class Device(IntEnum):
     FAN_IN = 1
