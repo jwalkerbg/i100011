@@ -523,14 +523,14 @@ reference = "imc.bg"
 
 [[package]]
 name = "mqttms"
-version = "3.5.1.dev1"
+version = "3.5.1"
 description = "mqttms library to handle MQTT communications and MS protocol master (client) side"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "mqttms-3.5.1.dev1-cp314-cp314-win_amd64.whl", hash = "sha256:d3e6502f083e25d3de2f5ecd3f775fc1e75da3bc0fdda40fdc2051fc9fbe124e"},
-    {file = "mqttms-3.5.1.dev1.tar.gz", hash = "sha256:a58b5a11bfdf9cdd5cd3904dac4dea04a4211e59a57a8e0075dfe096de6b2323"},
+    {file = "mqttms-3.5.1-cp314-cp314-win_amd64.whl", hash = "sha256:de3363d50aa2f64de0cf35d4fc7c36e9e9ec811ae97b409f38c083d3380bc69b"},
+    {file = "mqttms-3.5.1.tar.gz", hash = "sha256:674d8035c3848cc7b05527c8071883cefd9dae1e79e72be56e6662fa72234f98"},
 ]
 
 [package.dependencies]
@@ -1276,4 +1276,4 @@ reference = "imc.bg"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "75900169c963991db0501890c0bbb337fb85336f46cd2a48e9dcaeb7619617f5"
+content-hash = "979c674526778d80fa25828bcd294e59475f1f9a13e634426f338bb78575c082"
