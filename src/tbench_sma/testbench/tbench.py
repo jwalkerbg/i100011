@@ -7,7 +7,7 @@ import logging
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
-from tbench_sma.definitions import Device, DeviceMode, Led, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
+from tbench_sma.definitions import Device, DeviceMode, Led, LedOperation, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 
@@ -39,6 +39,7 @@ class TestBench:
                 (self.t_version, "Version" ),
                 (self.t_testmode, "Test Mode" ),
                 (self.t_sensors, "Sensors" ),
+                (self.t_leds, "LEDs" ),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -165,6 +166,17 @@ class TestBench:
 
     def t_sensors(self) -> bool:
         payload = self.ms_host.ms_sensors()
+        return True
+
+    def t_leds(self) -> bool:
+        for _ in range(2):
+            for led in Led:
+                payload = self.ms_host.ms_leds(LedOperation.ON, led)
+                rsp = payload.get("response","")
+                if rsp != "OK":
+                    logger.info(f"Cannot set LED {led.name} to ON: %s", rsp)
+                time.sleep(0.5)
+                self.ms_host.ms_leds(LedOperation.OFF, led)
         return True
 
     def t_serialn(self) -> bool:
