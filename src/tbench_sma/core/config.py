@@ -110,7 +110,7 @@ class Config:
             "dutdelay": 2.0,
             "interactive": True,
             "pairing": False,
-            "noresetwifi": False,
+            "resetwifi": True,
             "stop_if_failed": False
         }
     }
@@ -218,7 +218,7 @@ class Config:
                     "dutdelay": {"type": "number"},
                     "interactive": {"type": "boolean"},
                     "pairing": {"type": "boolean"},
-                    "noresetwifi": {"type": "boolean"},
+                    "resetwifi": {"type": "boolean"},
                     "stop_if_failed": {"type": "boolean"}
                 }
             }
@@ -379,8 +379,8 @@ class Config:
                 self.config['options']['interactive'] = config_cli.interactive
             if config_cli.pairing is not None:
                 self.config['options']['pairing'] = config_cli.pairing
-            if config_cli.noresetwifi is not None:
-                self.config['options']['noresetwifi'] = config_cli.noresetwifi
+            if config_cli.resetwifi is not None:
+                self.config['options']['resetwifi'] = config_cli.resetwifi
             if config_cli.stop_if_failed is not None:
                 self.config['options']['stop_if_failed'] = config_cli.stop_if_failed
 
@@ -522,7 +522,9 @@ def parse_args() -> argparse.Namespace:
     operative_group.add_argument("--pairing", dest='pairing', action='store_const', const=True, help="Execute pairing procedure. Assumes DUT has no valid WiFi credentials.")
     operative_group.add_argument("--no-pairing", dest='pairing', action='store_const', const=False, help="Do not execute pairing procedure. Assumes DUT already has valid WiFi credentials.")
 
-    operative_group.add_argument("--no-reset-wifi", dest='noresetwifi', action='store_const', const=True, help="Do not reset WiFi credentials on the DUT")
+    operative_group.add_argument("--reset-wifi", dest='resetwifi', action='store_const', const=True, help="Reset WiFi credentials on the DUT")
+    operative_group.add_argument("--no-reset-wifi", dest='resetwifi', action='store_const', const=False, help="Do not reset WiFi credentials on the DUT")
+
     operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
 
     return parser.parse_args()

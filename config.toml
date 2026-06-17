@@ -46,5 +46,6 @@ monitor_delay = 2.0     # interval to refresh data
 monitor_loops = 10      # how many loops to execute monitor. 0 means endless
 dutdelay = 2.0          # Delay in seconds after DIT BLE pairing
 interactive = true      # if false, smartfan uses values from the configuration or options and do not ask at command line for conformation
-nopairing = false       # Skip BLE pairing. Useful for testing already paired devices that have valid WiFi Credentials.
+pairing = true          # Use BLE pairing.
+resetwifi = false       # Do not reset Wifinf at the end of the tests.
 stop_if_failed = true   # stop testing if some test fails.
