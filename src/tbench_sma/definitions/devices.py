@@ -12,3 +12,7 @@ class Device(IntEnum):
     SENSOR_AIRQUALITY = 7
     SENSOR_AMBIENT = 8
     SENSOR_CO = 9
+
+class DeviceAction(IntEnum):
+    OFF = 0
+    ON = 1
