@@ -526,6 +526,7 @@ def parse_args() -> argparse.Namespace:
     operative_group.add_argument("--no-reset-wifi", dest='resetwifi', action='store_const', const=False, help="Do not reset WiFi credentials on the DUT")
 
     operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
+    operative_group.add_argument("--no-stop-if-failed", dest='stop_if_failed', action='store_const', const=False, help="Continue execution of tests even if current test failed")
 
     return parser.parse_args()
 
