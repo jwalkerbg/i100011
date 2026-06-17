@@ -7,7 +7,7 @@ import logging
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
-from tbench_sma.definitions import Device, DeviceMode, Led, LedOperation, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
+from tbench_sma.definitions import Device, DeviceAction, DeviceMode, Led, LedOperation, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 
@@ -40,6 +40,7 @@ class TestBench:
                 (self.t_testmode, "Test Mode" ),
                 (self.t_sensors, "Sensors" ),
                 (self.t_leds, "LEDs" ),
+                (self.t_heater, "Heater" ),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -177,6 +178,18 @@ class TestBench:
                     logger.info(f"Cannot set LED {led.name} to ON: %s", rsp)
                 time.sleep(0.5)
                 self.ms_host.ms_leds(LedOperation.OFF, led)
+        return True
+
+    def t_heater(self) -> bool:
+        payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.ON)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set HEATER to ON: %s", rsp)
+        time.sleep(1)
+        payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.OFF)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set HEATER to OFF: %s", rsp)
         return True
 
     def t_serialn(self) -> bool:
