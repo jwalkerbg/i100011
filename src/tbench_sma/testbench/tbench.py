@@ -80,6 +80,7 @@ class TestBench:
         except Exception as e:
             logger.error(f"Cannot subscribe to MQTT broker: {e}")
             return
+        self.ms_host.ms_protocol.set_unsolicited_message_processor(unsolicited_handler_a)
 
     def run_tests(self):
         # Run the tests in sequence
@@ -244,3 +245,5 @@ class TestBench:
 
         return True
 
+def unsolicited_handler_a(payload:dict) -> None:
+    logger.info(f"Received unsolicited message: {payload}")
