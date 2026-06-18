@@ -43,6 +43,8 @@ class TestBench:
                 (self.t_heater, "Heater" ),
                 (self.t_ionizer, "Ionizer" ),
                 (self.t_ultra_reppeler, "Ultra Repeller" ),
+                (self.t_FanIn, "Fan In" ),
+                (self.t_FanOut, "Fan Out" ),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -183,11 +185,12 @@ class TestBench:
         return True
 
     def t_heater(self) -> bool:
+        heateron = self.config.get("tests").get("heateron", 3.0)
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp != "OK":
             logger.info(f"Cannot set HEATER to ON: %s", rsp)
-        time.sleep(1)
+        time.sleep(heateron)
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp != "OK":
@@ -195,11 +198,12 @@ class TestBench:
         return True
 
     def t_ionizer(self) -> bool:
+        ionizeron = self.config.get("tests").get("ionizeron", 3.0)
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp != "OK":
             logger.info(f"Cannot set IONIZER to ON: %s", rsp)
-        time.sleep(1)
+        time.sleep(ionizeron)
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp != "OK":
@@ -207,16 +211,47 @@ class TestBench:
         return True
 
     def t_ultra_reppeler(self) -> bool:
+        repelleron = self.config.get("tests").get("repelleron", 3.0)
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp != "OK":
             logger.info(f"Cannot set ULTRA_REPELLER to ON: %s", rsp)
-        time.sleep(1)
+        time.sleep(repelleron)
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp != "OK":
             logger.info(f"Cannot set ULTRA_REPELLER to OFF: %s", rsp)
         return True
+
+    def t_FanIn(self) -> bool:
+        motoron = self.config.get("tests").get("motoron", 3.0)
+        motoroff = self.config.get("tests").get("motoroff", 1.0)
+        payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.ON,5000)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set FAN_IN to ON: %s", rsp)
+        time.sleep(motoron)
+        payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.OFF,5000)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set FAN_IN to OFF: %s", rsp)
+        time.sleep(motoroff)
+        return True;
+
+    def t_FanOut(self) -> bool:
+        motoron = self.config.get("tests").get("motoron", 3.0)
+        motoroff = self.config.get("tests").get("motoroff", 1.0)
+        payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.ON,5000)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set FAN_OUT to ON: %s", rsp)
+        time.sleep(motoron)
+        payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.OFF,5000)
+        rsp = payload.get("response","")
+        if rsp != "OK":
+            logger.info(f"Cannot set FAN_OUT to OFF: %s", rsp)
+        time.sleep(motoroff)
+        return True;
 
     def t_serialn(self) -> bool:
         idn = self.config.get("dut").get("ident")

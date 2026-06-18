@@ -101,7 +101,10 @@ class Config:
         },
         "tests": {
             "motoron": 3.0,
-            "motoroff": 1.0
+            "motoroff": 1.0,
+            "heateron": 3.0,
+            "ionizeron": 3.0,
+            "repelleron": 3.0
         },
         "options": {
             "mode": "testbench",
@@ -206,7 +209,10 @@ class Config:
                 "type": "object",
                 "properties": {
                     "motoron": {"type": "number"},
-                    "motoroff": {"type": "number"}
+                    "motoroff": {"type": "number"},
+                    "heateron": {"type": "number"},
+                    "ionizeron": {"type": "number"},
+                    "repelleron": {"type": "number"},
                 }
             },
             "options": {
@@ -365,6 +371,12 @@ class Config:
                 self.config['tests']['motoron'] = config_cli.motoron
             if config_cli.motoroff is not None:
                 self.config['tests']['motoroff'] = config_cli.motoroff
+            if config_cli.heateron is not None:
+                self.config['tests']['heateron'] = config_cli.heateron
+            if config_cli.ionizeron is not None:
+                self.config['tests']['ionizeron'] = config_cli.ionizeron
+            if config_cli.repelleron is not None:
+                self.config['tests']['repelleron'] = config_cli.repelleron
 
             # operatione options
             if config_cli.mode is not None:
@@ -508,6 +520,9 @@ def parse_args() -> argparse.Namespace:
     tests_group = parser.add_argument_group('Tests Options')
     tests_group.add_argument("--motoron", type=float, dest='motoron', help="Time to maintain motor enabled in tests")
     tests_group.add_argument("--motoroff", type=float, dest='motoroff', help="Time to maintain motor disabled in tests")
+    tests_group.add_argument("--heateron", type=float, dest='heateron', help="Time to maintain heater enabled in tests")
+    tests_group.add_argument("--ionizeron", type=float, dest='ionizeron', help="Time to maintain ionizer enabled in tests")
+    tests_group.add_argument("--repelleron", type=float, dest='repelleron', help="Time to maintain repeller enabled in tests")
 
     # operative options
     operative_group = parser.add_argument_group('Operative Options')
