@@ -39,14 +39,31 @@ class DutConfig(TypedDict, total=False):
     serialn: str
     serial_separator: str
 
+class TestsConfig(TypedDict, total=False):
+    motoron: float
+    motoroff: float
+    heateron: float
+    ionizeron: float
+    repelleron: float
+    buttontime: float
+
+class OptionsConfig(TypedDict, total=False):
+    mode: str
+    monitor_delay: float
+    monitor_loops: float
+    dutdelay: float
+    interactive: bool
+    pairing: bool
+    resetwifi: bool
+    stop_if_failed: bool
 
 class ConfigDict(TypedDict):
     template: TemplateConfig
     logging: LoggingConfig
     mqttms: MqttmsConfig
     dut: DutConfig
-    tests: Dict[str, Any]
-    options: Dict[str, Any]
+    tests: TestsConfig
+    options: OptionsConfig
 
 class Config:
     def __init__(self) -> None:
