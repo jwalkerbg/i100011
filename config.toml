@@ -42,6 +42,7 @@ motoroff = 1.0          # time to maintain motor in OFF state in tests
 heateron = 2.0          # time to maintain heater in ON state in tests
 ionizeron = 2.0         # time to maintain ionizer in ON state in tests
 repelleron = 2.0        # time to maintain ultra repeller in ON state in tests
+buttontime = 10.0       # time to wait for user to press the local button and IR remote control button
 
 [options]
 mode = "testbench"      # select operational mode ("testbench", "snonly", "monitor")

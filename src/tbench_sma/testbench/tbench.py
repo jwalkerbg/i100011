@@ -1,5 +1,6 @@
 # tbench.py
 
+import threading
 import time
 import struct
 import re
@@ -32,6 +33,11 @@ class UUIDv4Validator(Validator):
             )
 
 class TestBench:
+
+    # class variables because they will be used in static method unsolicited_handler
+    button_event = threading.Event()
+    ir_event = threading.Event()
+
     def __init__(self, config: dict):
         self.config = config
         self.tests = [
@@ -39,6 +45,7 @@ class TestBench:
                 (self.t_version, "Version" ),
                 (self.t_testmode, "Test Mode" ),
                 (self.t_sensors, "Sensors" ),
+                (self.t_kbd_ir, "Keyboard & IR"),
                 (self.t_leds, "LEDs" ),
                 (self.t_heater, "Heater" ),
                 (self.t_ionizer, "Ionizer" ),
@@ -222,6 +229,31 @@ class TestBench:
         if rsp != "OK":
             logger.info(f"Cannot set ULTRA_REPELLER to OFF: %s", rsp)
         return True
+
+    def t_kbd_ir(self) -> bool:
+        TestBench.button_event.clear()
+        TestBench.ir_event.clear()
+
+        print("Press shortly local button and any IR RC button in 10 seconds\n")
+        buttontime = self.config.get("tests").get("buttontime", 10.0)
+        deadline = time.monotonic() + buttontime
+        while time.monotonic() < deadline:
+            if TestBench.button_event.is_set() and TestBench.ir_event.is_set():
+                break
+            time.sleep(0.1)
+
+        btnres = TestBench.button_event.is_set()
+        irres = TestBench.ir_event.is_set()
+        if btnres:
+            logger.info("Button event has been received. Button test passed.")
+        else:
+            logger.info("Button event has not been received. Button test failed.")
+        if irres:
+            logger.info("IR event has been received. IR test passed.")
+        else:
+            logger.info("IR event has not been received. IR test failed.")
+
+        return btnres and irres
 
     def t_FanIn(self) -> bool:
         motoron = self.config.get("tests").get("motoron", 3.0)
