@@ -89,8 +89,8 @@ class Config:
                 'username': 'guest',
                 'password': 'guest',
                 'client_id': 'mqttx_93919c20',
-                "timeout": 15.0,
-                "long_payload": 25
+                'timeout': 15.0,
+                'long_payload': 25
             },
             'ms': {
                 'client_uuid': 'e6f87d77-4216-4be1-ab83-b5fa6792b747',
