@@ -63,6 +63,8 @@ class TestBench:
 
         self.resetwifi = [ ]
 
+        self.ms_host = None
+
     def set_ms_host(self, ms_host:MShost):
         self.ms_host = ms_host
 
@@ -92,7 +94,7 @@ class TestBench:
         except Exception as e:
             logger.error("Cannot subscribe to MQTT broker: %s", e)
             return
-        self.ms_host.ms_protocol.set_unsolicited_message_processor(unsolicited_handler_a)
+        self.ms_host.ms_protocol.set_unsolicited_message_processor(TestBench.unsolicited_handler)
 
     def run_tests(self):
         # Run the tests in sequence
@@ -342,5 +344,12 @@ class TestBench:
 
         return True
 
-def unsolicited_handler_a(payload:dict) -> None:
-    logger.info(f"Received unsolicited message: {payload}")
+    @staticmethod
+    def unsolicited_handler(payload:dict) -> None:
+        logger.info(f"Received unsolicited message: {payload}")
+
+        if isinstance(payload, dict):
+            if payload.get("src") == "keyboard":
+                TestBench.button_event.set()
+            if payload.get("src") == "ir":
+                TestBench.ir_event.set()
