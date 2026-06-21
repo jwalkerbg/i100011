@@ -614,4 +614,4 @@ class TestReport:
             print(f"{status:4} {test.get('name')}")
 
         print("\n=== JSON ===")
-        print(json.dumps(asdict(self), indent=4))
+        print(json.dumps(asdict(self), indent=2))
