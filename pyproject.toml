@@ -49,7 +49,7 @@ types-jsonschema = ">= 4.25"
 rfc3986 = ">= 2.0.0"
 colorama = ">=0.4.6"
 prompt-toolkit = ">=3.0"
-mqttms = "3.5.1"
+mqttms = "3.5.2"
 
 # Development dependencies
 [tool.poetry.group.dev.dependencies]
