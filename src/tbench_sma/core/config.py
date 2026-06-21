@@ -27,6 +27,7 @@ class LoggingConfig(TypedDict, total=False):
     use_color: bool
     use_string_handler: bool
     version_option: bool
+    exc_full_stack: bool
 
 class MqttmsConfig(TypedDict, total=False):
     mqtt: Dict[str, Any]
@@ -72,7 +73,7 @@ class Config:
     DEFAULT_CONFIG: ConfigDict = {
         'template': {
             'template_name': "tbench_sma",
-            'template_version': "4.1.0",
+            'template_version': "4.2.0",
             'template_description': { 'text': """Template with CLI interface, configuration options in a file, logger and unit tests""", 'content-type': "text/plain" }
         },
         'logging': {
@@ -80,7 +81,8 @@ class Config:
             'log_prefix': True,
             'use_color': True,
             'use_string_handler': False,
-            'version_option': False
+            'version_option': False,
+            'exc_full_stack': False
         },
         'mqttms': {
             'mqtt': {
@@ -159,6 +161,9 @@ class Config:
                         "type": "boolean"
                     },
                     "version_option": {
+                        "type": "boolean"
+                    },
+                    "exc_full_stack": {
                         "type": "boolean"
                     }
                 },
@@ -344,6 +349,8 @@ class Config:
                 self.config['logging']['use_color'] = config_cli.use_color
             if config_cli.use_string_handler is not None:
                 self.config['logging']['use_string_handler'] = config_cli.use_string_handler
+            if config_cli.exc_full_stack is not None:
+                self.config['logging']['exc_full_stack'] = config_cli.exc_full_stack
 
         # Handle MQTT CLI overrides
             if config_cli.mqtt_host is not None:
@@ -508,6 +515,21 @@ def parse_args() -> argparse.Namespace:
         const=False,
         dest="use_string_handler",
         help="Disable string handler to store logs in an internal buffer"
+    )
+    exception_group = logging_group.add_mutually_exclusive_group()
+    exception_group.add_argument(
+        "--exc-full-stack",
+        action="store_const",
+        const=True,
+        dest='exc_full_stack',
+        help="Enable full stack logging for exceptions (useful for development and debugging)"
+    )
+    exception_group.add_argument(
+        "--no-exc-full-stack",
+        action="store_const",
+        const=False,
+        dest='exc_full_stack',
+        help="Disable full stack logging for exceptions (useful for production)"
     )
 
     # application options & parameters

@@ -27,7 +27,7 @@ def main() -> None:
             # Step 3b: Run the application with the collected configuration
             run_app(cfg)
     except Exception as e:
-        logger.error("Application terminated: %s", str(e), exc_info=False)
+        logger.error("Application terminated: %s", str(e), exc_info=cfg.config['logging']['exc_full_stack'])
 
 if __name__ == "__main__":
     main()
