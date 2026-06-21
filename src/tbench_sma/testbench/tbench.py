@@ -4,6 +4,7 @@ import threading
 import time
 from datetime import datetime, UTC
 import struct
+import queue
 import re
 import json
 import logging
@@ -42,6 +43,10 @@ class TestBench:
     # class variables because they will be used in static method unsolicited_handler
     button_event = threading.Event()
     ir_event = threading.Event()
+    dev_state_event = threading.Event()
+    kbd_q = queue.Queue()
+    ir_q = queue.Queue()
+    devstate_q = queue.Queue()
 
     def __init__(self, config: dict):
         self.config = config
@@ -217,15 +222,29 @@ class TestBench:
 
     def t_sensors(self) -> bool:
         tc = TestCase("t_sensors")
+        res = True
+        TestBench.dev_state_event.clear()
+
         payload = self.ms_host.ms_sensors()
         if payload.get("response","") == "OK":
             logger.info("Sensors command was sent")
 
-            # here waiting for sensor data via USL channel
+            deadline = time.monotonic() + 5.0
+            while time.monotonic() < deadline:
+                if TestBench.dev_state_event.is_set():
+                    uslp = TestBench.devstate_q.get()
 
-            tc.result = True
-            self.report.add_test_data(tc)
-            return True
+                    raw = (
+                        uslp.get("data", {})
+                            .get("sensors", {})
+                            .get("raw", {})
+                    )
+                    tc.data.update(raw)
+
+                    tc.result = True
+                    self.report.add_test_data(tc)
+                    return True
+
         tc.result = False
         self.report.add_test_data(tc)
         return False
@@ -366,13 +385,17 @@ class TestBench:
         irres = TestBench.ir_event.is_set()
         if btnres:
             logger.info("Button event has been received. Button test passed.")
-            tc.data['Button'] = "PASS"
+            kbdp = TestBench.kbd_q.get()
+            tc.data['kbd_event'] = kbdp.get("data", {}).get("event","")
+            tc.data['button'] = "PASS"
         else:
             logger.info("Button event has not been received. Button test failed.")
             tc.data['Button'] = "FAIL"
             res = False
         if irres:
             logger.info("IR event has been received. IR test passed.")
+            irp = TestBench.ir_q.get()
+            tc.data['ir_event'] = irp.get("data", {}).get("event","")
             tc.data['ir'] = "PASS"
         else:
             logger.info("IR event has not been received. IR test failed.")
@@ -521,9 +544,16 @@ class TestBench:
 
         if isinstance(payload, dict):
             if payload.get("src") == "keyboard":
+                logger.info("Received keyboard event: %s",payload.get("data",{}).get("event",""))
+                TestBench.kbd_q.put(payload)
                 TestBench.button_event.set()
             if payload.get("src") == "ir":
+                logger.info("Received IR event: %s",payload.get("data",{}).get("event",""))
+                TestBench.ir_q.put(payload)
                 TestBench.ir_event.set()
+            if payload.get("src") == "system" and payload.get("type") == "devstate":
+                TestBench.devstate_q.put(payload)
+                TestBench.dev_state_event.set()
 
 @dataclass
 class TestCase:
