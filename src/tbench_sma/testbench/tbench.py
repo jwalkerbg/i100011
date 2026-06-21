@@ -2,9 +2,14 @@
 
 import threading
 import time
+from datetime import datetime, UTC
 import struct
 import re
+import json
 import logging
+from dataclasses import dataclass, field, asdict
+from copy import deepcopy
+from typing import Dict, Tuple, Any, Optional
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
@@ -50,8 +55,8 @@ class TestBench:
                 (self.t_heater, "Heater" ),
                 (self.t_ionizer, "Ionizer" ),
                 (self.t_ultra_reppeler, "Ultra Repeller" ),
-                (self.t_FanIn, "Fan In" ),
-                (self.t_FanOut, "Fan Out" ),
+                (self.t_fan_in, "Fan In" ),
+                (self.t_fan_out, "Fan Out" ),
                 (self.t_serialn, "Serial N")
         ]
         self.snonly = [
@@ -102,6 +107,8 @@ class TestBench:
 
         self.ms_subscribe()
 
+        self.report = TestReport(self.config["mqttms"]["ms"]["server_uuid"])
+
         match self.config["options"]["mode"]:
             case "snonly":
                 testarray = self.snonly
@@ -125,6 +132,8 @@ class TestBench:
                 logger.error("API_MQTT_READY received answer: {resp}")
                 return
 
+        self.report.create_prolog()
+
         for test in testarray:
             logger.info("")
             logger.info("**** Test %s ****",test[1])
@@ -135,6 +144,9 @@ class TestBench:
                 logger.info("**** Test %s: FAIL",test[1])
             if self.config['options']['stop_if_failed'] and not res:
                 break
+
+        self.report.add_epilog()
+        self.report.dump_data()
 
     def reset_wifi_credentials(self) -> bool:
         payload = self.ms_host.ms_wificred("*","*")
@@ -147,6 +159,8 @@ class TestBench:
     # tests
 
     def t_who_am_i(self) -> bool:
+        tc = TestCase("t_who_am_i")
+
         payload = self.ms_host.ms_who_am_i()
         if payload.get("response","") == "OK":
             jdata = payload.get('data', None)
@@ -154,10 +168,18 @@ class TestBench:
             bdata = bytes.fromhex(jdata)
             unpacked_data = struct.unpack(format_string, bdata)
             logger.info("Device ID: %02x",unpacked_data[0])
+            tc.result = True
+            tc.data['Device code'] = unpacked_data[0]
+            self.report.add_test_data(tc)
             return True
+
+        tc.result = False
+        tc.data['code'] = 0
+        self.report.add_test_data(tc)
         return False
 
     def t_version(self) -> bool:
+        tc = TestCase("t_version")
         payload = self.ms_host.ms_version()
         if payload.get("response","") == "OK":
             jdata = payload.get('data', None)
@@ -167,72 +189,168 @@ class TestBench:
             serial = serial_bytes.decode('ascii').rstrip('\x00')
             logger.info(f"Version: %s",versiondev)
             logger.info("Serial Number: %s",serial)
+
+            tc.result = True
+            tc.data['version'] = versiondev
+            tc.data['serialn'] = serial
+            self.report.add_test_data(tc)
             return True
+
+        tc.result = False
+        self.report.add_test_data(tc)
         return False
 
     def t_testmode(self) -> bool:
+        tc = TestCase("t_testmode")
         payload = self.ms_host.ms_set_mode(DeviceMode.TEST)
         if payload.get("response","") == "OK":
             logger.info("Test mode is set")
+            tc.result = True
+            tc.data['action'] = "Test mode was set"
+            self.report.add_test_data(tc)
             return True
         logger.info("Test mode was not set")
+        tc.result = False
+        tc.data['action'] = "Test mode was not set"
+        self.report.add_test_data(tc)
         return False
 
     def t_sensors(self) -> bool:
+        tc = TestCase("t_sensors")
         payload = self.ms_host.ms_sensors()
-        return True
+        if payload.get("response","") == "OK":
+            logger.info("Sensors command was sent")
+
+            # here waiting for sensor data via USL channel
+
+            tc.result = True
+            self.report.add_test_data(tc)
+            return True
+        tc.result = False
+        self.report.add_test_data(tc)
+        return False
 
     def t_leds(self) -> bool:
-        for _ in range(2):
+        tc = TestCase("t_leds")
+        res = True
+        for _ in range(1):
             for led in Led:
                 payload = self.ms_host.ms_leds(LedOperation.ON, led)
                 rsp = payload.get("response","")
-                if rsp != "OK":
+                if rsp == "OK":
+                    tc.data[led.name + " set:"] = "PASS"
+                else:
                     logger.info(f"Cannot set LED {led.name} to ON: %s", rsp)
+                    tc.data[led.name + " set:"] = "FAIL"
+                    res = False
+
                 time.sleep(0.5)
+
                 self.ms_host.ms_leds(LedOperation.OFF, led)
-        return True
+                if rsp == "OK":
+                    tc.data[led.name + " clear:"] = "PASS"
+                else:
+                    logger.info(f"Cannot clear LED {led.name} to ON: %s", rsp)
+                    tc.data[led.name + " clear:"] = "FAIL"
+                    res = False
+
+        tc.result = res
+        self.report.add_test_data(tc)
+        return res
 
     def t_heater(self) -> bool:
+        tc = TestCase("t_heater")
+        res = True
         heateron = self.config.get("tests").get("heateron", 3.0)
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.ON)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set HEATER to ON: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"HEATER was to set to ON: %s", rsp)
+            tc.data['heater on:'] = "PASS"
+        else:
+            logger.info(f"HEATER was not set to ON: %s", rsp)
+            tc.data['heater on:'] = "FAIL"
+            res = False
+
         time.sleep(heateron)
+
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.OFF)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set HEATER to OFF: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"HEATER was to set to OFF: %s", rsp)
+            tc.data['heater off:'] = "PASS"
+        else:
+            logger.info(f"HEATER was not set to OFF: %s", rsp)
+            tc.data['heater off:'] = "FAIL"
+            res = False
+
+        tc.result = res
+        self.report.add_test_data(tc)
         return True
 
     def t_ionizer(self) -> bool:
+        tc = TestCase("t_ionizer")
+        res = True
         ionizeron = self.config.get("tests").get("ionizeron", 3.0)
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.ON)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set IONIZER to ON: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"IONIZER was set to ON: %s", rsp)
+            tc.data['ionizer on:'] = "PASS"
+        else:
+            logger.info(f"IONIZER was not set to ON: %s", rsp)
+            tc.data['ionizer on:'] = "FAIL"
+            res = False
+
         time.sleep(ionizeron)
+
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.OFF)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set IONIZER to OFF: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"IONIZER was set to OFF: %s", rsp)
+            tc.data['ionizer on:'] = "PASS"
+        else:
+            logger.info(f"IONIZER was not set to OFF: %s", rsp)
+            tc.data['ionizer on:'] = "FAIL"
+            res = False
+
+        tc.result = res
+        self.report.add_test_data(tc)
         return True
 
     def t_ultra_reppeler(self) -> bool:
+        tc = TestCase("t_ultra_reppeler")
+        res = True
         repelleron = self.config.get("tests").get("repelleron", 3.0)
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.ON)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set ULTRA_REPELLER to ON: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"ULTRA_REPELLER was set to ON: %s", rsp)
+            tc.data['repeller on:'] = "PASS"
+        else:
+            logger.info(f"ULTRA_REPELLER was set to ON: %s", rsp)
+            tc.data['repeller on:'] = "FAIL"
+            res = False
+
         time.sleep(repelleron)
+
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.OFF)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set ULTRA_REPELLER to OFF: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"ULTRA_REPELLER was set to OFF: %s", rsp)
+            tc.data['repeller off:'] = "PASS"
+        else:
+            logger.info(f"ULTRA_REPELLER was set to OFF: %s", rsp)
+            tc.data['repeller off:'] = "FAIL"
+            res = False
+
+        tc.result = res
+        self.report.add_test_data(tc)
         return True
 
     def t_kbd_ir(self) -> bool:
+        tc = TestCase("t_kbd_ir")
+        res = True
         TestBench.button_event.clear()
         TestBench.ir_event.clear()
 
@@ -248,46 +366,92 @@ class TestBench:
         irres = TestBench.ir_event.is_set()
         if btnres:
             logger.info("Button event has been received. Button test passed.")
+            tc.data['Button'] = "PASS"
         else:
             logger.info("Button event has not been received. Button test failed.")
+            tc.data['Button'] = "FAIL"
+            res = False
         if irres:
             logger.info("IR event has been received. IR test passed.")
+            tc.data['ir'] = "PASS"
         else:
             logger.info("IR event has not been received. IR test failed.")
+            tc.data['ir'] = "FAIL"
+            res = False
 
+        tc.result = res
+        self.report.add_test_data(tc)
         return btnres and irres
 
-    def t_FanIn(self) -> bool:
+    def t_fan_in(self) -> bool:
+        tc = TestCase("t_fan_in")
+        res = True
         motoron = self.config.get("tests").get("motoron", 3.0)
         motoroff = self.config.get("tests").get("motoroff", 1.0)
         payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.ON,5000)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set FAN_IN to ON: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"FAN IN was set to ON: %s", rsp)
+            tc.data['fan in on:'] = "PASS"
+        else:
+            logger.info(f"FAN IN was not set to ON: %s", rsp)
+            tc.data['fan in on:'] = "FAIL"
+            res = False
+
         time.sleep(motoron)
+
         payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.OFF,5000)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set FAN_IN to OFF: %s", rsp)
-        time.sleep(motoroff)
-        return True;
+        if rsp == "OK":
+            logger.info(f"FAN IN was set to OFF: %s", rsp)
+            tc.data['fan in off:'] = "PASS"
+        else:
+            logger.info(f"FAN IN was not set to OFF: %s", rsp)
+            tc.data['fan in off:'] = "FAIL"
+            res = False
 
-    def t_FanOut(self) -> bool:
+        time.sleep(motoroff)
+
+        tc.result = res
+        self.report.add_test_data(tc)
+        return res
+
+    def t_fan_out(self) -> bool:
+        tc = TestCase("t_fan_out")
+        res = True
         motoron = self.config.get("tests").get("motoron", 3.0)
         motoroff = self.config.get("tests").get("motoroff", 1.0)
         payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.ON,5000)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set FAN_OUT to ON: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"FAN OUT was set to ON: %s", rsp)
+            tc.data['fan out on:'] = "PASS"
+        else:
+            logger.info(f"FAN OUT was not set to ON: %s", rsp)
+            tc.data['fan out on:'] = "FAIL"
+            res = False
+
         time.sleep(motoron)
+
         payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.OFF,5000)
         rsp = payload.get("response","")
-        if rsp != "OK":
-            logger.info(f"Cannot set FAN_OUT to OFF: %s", rsp)
+        if rsp == "OK":
+            logger.info(f"FAN OUT was set to OFF: %s", rsp)
+            tc.data['fan out off:'] = "PASS"
+        else:
+            logger.info(f"FAN OUT was not set to OFF: %s", rsp)
+            tc.data['fan out off:'] = "FAIL"
+            res = False
+
         time.sleep(motoroff)
-        return True;
+
+        tc.result = res
+        self.report.add_test_data(tc)
+        return res
 
     def t_serialn(self) -> bool:
+        tc = TestCase("t_serialn")
+        res = True
         idn = self.config.get("dut").get("ident")
         serial_date = self.config.get("dut").get("serial_date")
         serialn = self.config.get("dut").get("serialn")
@@ -301,13 +465,20 @@ class TestBench:
 
         payload = self.ms_host.ms_serial(snstr)
         if payload.get("response","") == "OK":
-            logger.info("Serial number is written")
-            return True
+            logger.info("Serial number \'%s\'is written",snstr)
+            tc.data['serialn'] = snstr
+            self.report.serialn = snstr
+        else:
+            logger.info("Serial number was not set")
+            tc.data['serialn'] = "not set"
+            res = False
 
-        logger.info("Serial number was not set")
-        return False
+        tc.result = res
+        self.report.add_test_data(tc)
+        return res
 
     def t_monitor(self):
+        tc = TestCase("t_monitor")
         logger.info("Press Ctrl+C to stop monitoring")
         logger.setLevel(logging.WARNING)
         logging.getLogger("tbench_sma.core.ms_host").setLevel(logging.WARNING)
@@ -353,3 +524,64 @@ class TestBench:
                 TestBench.button_event.set()
             if payload.get("src") == "ir":
                 TestBench.ir_event.set()
+
+@dataclass
+class TestCase:
+    name: str
+    result: bool = False
+
+    timestamp: str = field(
+        default_factory=lambda: datetime.now(UTC)
+        .isoformat(timespec="milliseconds")
+        .replace("+00:00", "Z")
+    )
+
+    data: dict[str, Any] = field(default_factory=dict)
+
+@dataclass
+class TestReport:
+    uuid: str = ""
+    serialn: str = ""
+    timestamp: str = ""
+    test_results: list = field(default_factory=list)
+    passed: int = 0
+    failed: int = 0
+    skipped: int = 0
+    total: int = 0
+    result: bool = True
+
+    def create_prolog(self):
+        self.timestamp = datetime.now(UTC).isoformat()
+
+    def add_test_data(self, tc: TestCase):
+        if tc is not None:
+            self.test_results.append(asdict(tc))
+
+    def add_epilog(self):
+        tests = self.test_results
+        passed = sum(
+            1 for t in tests
+            if t.get("result") is True
+        )
+        failed = sum(
+            1 for t in tests
+            if t.get("result") is False
+        )
+        self.passed = passed
+        self.failed = failed
+        self.total = len(tests)
+        self.skipped = len(tests) - passed - failed
+
+    def dump_data(self):
+        print("\n=== TEST REPORT ===")
+        print(f"Passed : {self.passed}")
+        print(f"Failed : {self.failed}")
+        print(f"Total  : {self.total}")
+
+        print("\n=== DETAILS ===")
+        for test in self.test_results:
+            status = "PASS" if test.get("result") else "FAIL"
+            print(f"{status:4} {test.get('name')}")
+
+        print("\n=== JSON ===")
+        print(json.dumps(asdict(self), indent=4))
