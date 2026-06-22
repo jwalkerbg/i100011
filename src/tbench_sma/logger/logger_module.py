@@ -3,9 +3,9 @@
 # logger_module.py
 import sys
 import logging
-import colorama
 from typing import Optional
 from datetime import datetime
+import colorama
 
 TAGNAME = "invoices"
 
