@@ -499,7 +499,6 @@ class TestBench:
         return res
 
     def t_monitor(self) -> bool:
-        tc = TestCase("t_monitor")
         logger.info("Press Ctrl+C to stop monitoring")
         logger.setLevel(logging.WARNING)
         logging.getLogger("tbench_sma.core.ms_host").setLevel(logging.WARNING)
