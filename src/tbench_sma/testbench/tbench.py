@@ -133,7 +133,7 @@ class TestBench:
             payload = self.ms_host.ms_mqtt_ready()
             resp = payload.get("response","")
             if resp != "OK":
-                logger.error("API_MQTT_READY received answer: {resp}")
+                logger.error("API_MQTT_READY received answer: %s", resp)
                 return
 
         self.report.create_prolog()
