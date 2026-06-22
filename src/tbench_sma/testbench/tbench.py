@@ -524,7 +524,7 @@ class TestBench:
 
                 time.sleep(self.config["options"]["monitor_delay"])
                 print(f"\033[{lines}A", end="", flush=True)
-        except KeyboardInterrupt as e   :
+        except KeyboardInterrupt as e:
             raise e
         finally:
             logger.setLevel(logging.INFO)
