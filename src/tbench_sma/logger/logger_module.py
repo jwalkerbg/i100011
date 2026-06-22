@@ -25,22 +25,6 @@ class CustomFormatter(logging.Formatter):
         log_message = f"{log_time} - {record.name} - {record.levelname} - {message}"
         return log_message
 
-# Custom Logging Handler
-class StringHandler(logging.Handler):
-    def __init__(self) -> None:
-        super().__init__()
-        self.log_messages: list[str] = []
-
-    def emit(self, record: logging.LogRecord) -> None:
-        log_entry = self.format(record)
-        self.log_messages.append(log_entry)
-
-    def get_logs(self) -> str:
-        return '\n'.join(self.log_messages)
-
-    def clear_logs(self) -> None:
-        self.log_messages = []
-
 # ================================================================
 #  Custom log levels: VERBOSE(15) and QUIET(25)
 # ================================================================
