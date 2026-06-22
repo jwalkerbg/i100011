@@ -540,7 +540,8 @@ def parse_args() -> argparse.Namespace:
     mqtt_group.add_argument('--mqtt-password', type=str, help='MQTT password')
     mqtt_group.add_argument('--mqtt-client-id', type=str, help="MQTT Client ID, used by the broker")
     mqtt_group.add_argument("--mqtt-timeout", type=float, help="Timeout to wait connection or other activity in MQTT handler.")
-    mqtt_group.add_argument("--mqtt-lp", type=int, dest='long_payload', help="Determines threshold of long payloads. When they are longer that this value, a short string is logged instead of real payloads. --verbose makes real payloads to be logged always.")
+    mqtt_group.add_argument("--mqtt-lp", type=int, dest='long_payload',
+                            help="Determines threshold of long payloads. When they are longer that this value, a short string is logged instead of real payloads. --verbose makes real payloads to be logged always.")
 
     # ms protocol
     ms_group = parser.add_argument_group('MS Protocol Options')
@@ -572,7 +573,8 @@ def parse_args() -> argparse.Namespace:
     operative_group.add_argument('--mode', type=str, dest='mode', choices=valid_modes, help='Select mode of operation') # testbench, monitor, sn-only
     operative_group.add_argument("--monitor-delay", type=float, dest='monitor_delay', help="Interval of refreshing data in monitor mode")
     operative_group.add_argument("--monitor-loops", type=int, dest='monitor_loops', help="Number of loops in monitor mode")
-    operative_group.add_argument("--dut-delay", type=float, dest='dutdelay', help="Delay after BLE pairing and connecting to MQTT before start of tests driven by MS protocol over MQTT. This time allows DUT to setup WiFi/MQTT connection.")
+    operative_group.add_argument("--dut-delay", type=float, dest='dutdelay',
+                                 help="Delay after BLE pairing and connecting to MQTT before start of tests driven by MS protocol over MQTT. This time allows DUT to setup WiFi/MQTT connection.")
     interactive_group = operative_group.add_mutually_exclusive_group()
     interactive_group.add_argument('--interactive', dest='interactive', action='store_const', const=True, help='Enable interactive mode (default)')
     interactive_group.add_argument('--no-interactive', dest='interactive', action='store_const', const=False, help='Disable interactive mode')
