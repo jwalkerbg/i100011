@@ -192,7 +192,7 @@ class TestBench:
             version_bytes, serial_bytes = byte_array.split(b'\0',1)
             versiondev = version_bytes.decode('ascii')
             serial = serial_bytes.decode('ascii').rstrip('\x00')
-            logger.info(f"Version: %s",versiondev)
+            logger.info("Version: %s",versiondev)
             logger.info("Serial Number: %s",serial)
 
             tc.result = True
@@ -284,10 +284,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"HEATER was to set to ON: %s", rsp)
+            logger.info("HEATER was to set to ON: %s", rsp)
             tc.data['heater on:'] = "PASS"
         else:
-            logger.info(f"HEATER was not set to ON: %s", rsp)
+            logger.info("HEATER was not set to ON: %s", rsp)
             tc.data['heater on:'] = "FAIL"
             res = False
 
@@ -296,10 +296,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"HEATER was to set to OFF: %s", rsp)
+            logger.info("HEATER was to set to OFF: %s", rsp)
             tc.data['heater off:'] = "PASS"
         else:
-            logger.info(f"HEATER was not set to OFF: %s", rsp)
+            logger.info("HEATER was not set to OFF: %s", rsp)
             tc.data['heater off:'] = "FAIL"
             res = False
 
@@ -314,10 +314,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"IONIZER was set to ON: %s", rsp)
+            logger.info("IONIZER was set to ON: %s", rsp)
             tc.data['ionizer on:'] = "PASS"
         else:
-            logger.info(f"IONIZER was not set to ON: %s", rsp)
+            logger.info("IONIZER was not set to ON: %s", rsp)
             tc.data['ionizer on:'] = "FAIL"
             res = False
 
@@ -326,10 +326,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"IONIZER was set to OFF: %s", rsp)
+            logger.info("IONIZER was set to OFF: %s", rsp)
             tc.data['ionizer on:'] = "PASS"
         else:
-            logger.info(f"IONIZER was not set to OFF: %s", rsp)
+            logger.info("IONIZER was not set to OFF: %s", rsp)
             tc.data['ionizer on:'] = "FAIL"
             res = False
 
@@ -344,10 +344,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.ON)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"ULTRA_REPELLER was set to ON: %s", rsp)
+            logger.info("ULTRA_REPELLER was set to ON: %s", rsp)
             tc.data['repeller on:'] = "PASS"
         else:
-            logger.info(f"ULTRA_REPELLER was set to ON: %s", rsp)
+            logger.info("ULTRA_REPELLER was set to ON: %s", rsp)
             tc.data['repeller on:'] = "FAIL"
             res = False
 
@@ -356,10 +356,10 @@ class TestBench:
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.OFF)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"ULTRA_REPELLER was set to OFF: %s", rsp)
+            logger.info("ULTRA_REPELLER was set to OFF: %s", rsp)
             tc.data['repeller off:'] = "PASS"
         else:
-            logger.info(f"ULTRA_REPELLER was set to OFF: %s", rsp)
+            logger.info("ULTRA_REPELLER was set to OFF: %s", rsp)
             tc.data['repeller off:'] = "FAIL"
             res = False
 
@@ -414,10 +414,10 @@ class TestBench:
         payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.ON,5000)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"FAN IN was set to ON: %s", rsp)
+            logger.info("FAN IN was set to ON: %s", rsp)
             tc.data['fan in on:'] = "PASS"
         else:
-            logger.info(f"FAN IN was not set to ON: %s", rsp)
+            logger.info("FAN IN was not set to ON: %s", rsp)
             tc.data['fan in on:'] = "FAIL"
             res = False
 
@@ -426,10 +426,10 @@ class TestBench:
         payload = self.ms_host.ms_fan_process(Device.FAN_IN, DeviceAction.OFF,5000)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"FAN IN was set to OFF: %s", rsp)
+            logger.info("FAN IN was set to OFF: %s", rsp)
             tc.data['fan in off:'] = "PASS"
         else:
-            logger.info(f"FAN IN was not set to OFF: %s", rsp)
+            logger.info("FAN IN was not set to OFF: %s", rsp)
             tc.data['fan in off:'] = "FAIL"
             res = False
 
@@ -447,10 +447,10 @@ class TestBench:
         payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.ON,5000)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"FAN OUT was set to ON: %s", rsp)
+            logger.info("FAN OUT was set to ON: %s", rsp)
             tc.data['fan out on:'] = "PASS"
         else:
-            logger.info(f"FAN OUT was not set to ON: %s", rsp)
+            logger.info("FAN OUT was not set to ON: %s", rsp)
             tc.data['fan out on:'] = "FAIL"
             res = False
 
@@ -459,10 +459,10 @@ class TestBench:
         payload = self.ms_host.ms_fan_process(Device.FAN_OUT, DeviceAction.OFF,5000)
         rsp = payload.get("response","")
         if rsp == "OK":
-            logger.info(f"FAN OUT was set to OFF: %s", rsp)
+            logger.info("FAN OUT was set to OFF: %s", rsp)
             tc.data['fan out off:'] = "PASS"
         else:
-            logger.info(f"FAN OUT was not set to OFF: %s", rsp)
+            logger.info("FAN OUT was not set to OFF: %s", rsp)
             tc.data['fan out off:'] = "FAIL"
             res = False
 
