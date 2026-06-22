@@ -1,13 +1,10 @@
 # app_runner.py
 
-from importlib.metadata import version as pkg_version
-#from time import time
 import time
 from typing import Dict, Tuple
 from mqttms import MQTTDispatcher
 from mqttms.core import MQTTms
 
-import tbench_sma
 from tbench_sma.core.config import Config
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
