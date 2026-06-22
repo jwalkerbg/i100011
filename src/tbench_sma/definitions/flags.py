@@ -1,6 +1,6 @@
 # definitions/flags.py
 
-from enum import IntEnum, IntFlag
+from enum import IntFlag
 
 class ParFlags(IntFlag):
     HAS_WIFI_CRED = 0x0001  # device has valid WiFi SSID/password
