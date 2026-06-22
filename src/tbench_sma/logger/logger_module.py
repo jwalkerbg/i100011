@@ -132,7 +132,7 @@ def setup_logging(verbosity: int = 3,
     # -----------------------------------------
     # Map verbosity → logging level
     # -----------------------------------------
-    LEVELS = {
+    log_levels = {
         0: logging.CRITICAL,
         1: logging.ERROR,
         2: logging.WARNING,
@@ -142,7 +142,7 @@ def setup_logging(verbosity: int = 3,
         6: logging.DEBUG,
     }
 
-    level = LEVELS.get(verbosity, logging.INFO)
+    level = log_levels.get(verbosity, logging.INFO)
 
     root = logging.getLogger()
     root.setLevel(level)
