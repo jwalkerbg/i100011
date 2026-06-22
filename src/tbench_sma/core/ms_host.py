@@ -167,18 +167,18 @@ class MShost:
     def ms_set_speed(self, speed: int) -> dict | None:
         return self.ms_command_send_uint8("SX", speed)
 
-    def ms_led_duties(self, duty0: int, duty1: int, duty2: int, duty3: int, duty4: int, operation: int) -> dict | None:
-        # duty0-4: 0-1023
-        # duty0 = blue
-        # duty1 = green
-        # duty2 = red
-        # duty3 = yellow
-        # duty4 = white
+    def ms_led_duties(self, duties: list[int], operation: int) -> dict | None:
+        # duty[0-4]: 0-1023
+        # duty[0] = blue
+        # duty[1] = green
+        # duty[2] = red
+        # duty[3] = yellow
+        # duty[4] = white
         # operation:
         # LED_DUTY_SET = set in RAM only,
         # LED_DUTY_DEFAULT = set in RAM and save to flash
         # LED_DUTY_STORE = save to flash and update RAM
-        pd = struct.pack('<HHHHHB', duty0, duty1, duty2, duty3, duty4, operation).hex()
+        pd = struct.pack('<HHHHHB', duties[0], duties[1], duties[2], duties[3], duties[4], operation).hex()
         payload = f'{{"command":"LD","data":"{pd}"}}'
         self.ms_protocol.put_command(payload)
 
