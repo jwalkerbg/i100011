@@ -1,7 +1,6 @@
 # ms_host.py
 
 import struct
-from turtle import speed
 from  mqttms import MSProtocol
 from tbench_sma.logger import get_app_logger
 
