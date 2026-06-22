@@ -101,7 +101,7 @@ class TestBench:
                 logger.error("Cannot subscribe to MQTT broker: %d",res)
                 return
         except Exception as e:
-            logger.error("Cannot subscribe to MQTT broker: %s", e)
+            logger.error("Cannot subscribe to MQTT broker: %s", str(e), exc_info=self.config.config['logging']['exc_full_stack'])
             return
         self.ms_host.ms_protocol.set_unsolicited_message_processor(TestBench.unsolicited_handler)
 
@@ -538,7 +538,7 @@ class TestBench:
 
     @staticmethod
     def unsolicited_handler(payload:dict) -> None:
-        logger.info(f"Received unsolicited message: {payload}")
+        logger.info("Received unsolicited message %s", json.dumps(payload, separators=(",", ":")))
 
         if isinstance(payload, dict):
             if payload.get("src") == "keyboard":
