@@ -222,7 +222,6 @@ class TestBench:
 
     def t_sensors(self) -> bool:
         tc = TestCase("t_sensors")
-        res = True
         TestBench.dev_state_event.clear()
 
         payload = self.ms_host.ms_sensors()
