@@ -30,7 +30,7 @@ class UUIDv4Validator(Validator):
         r'[0-9a-fA-F]{12}$'
     )
 
-    def validate(self, document):
+    def validate(self, document) -> None:
         text = document.text.strip()
         if not self.uuid4_regex.fullmatch(text):
             raise ValidationError(
@@ -44,9 +44,9 @@ class TestBench:
     button_event = threading.Event()
     ir_event = threading.Event()
     dev_state_event = threading.Event()
-    kbd_q = queue.Queue()
-    ir_q = queue.Queue()
-    devstate_q = queue.Queue()
+    kbd_q: queue.Queue = queue.Queue()
+    ir_q: queue.Queue = queue.Queue()
+    devstate_q: queue.Queue = queue.Queue()
 
     def __init__(self, config: dict):
         self.config = config
@@ -73,9 +73,9 @@ class TestBench:
 
         self.resetwifi = [ ]
 
-        self.ms_host = None
+        #self.ms_host: MShost = None
 
-    def set_ms_host(self, ms_host:MShost):
+    def set_ms_host(self, ms_host:MShost) -> None:
         self.ms_host = ms_host
 
     def ble_binding(self) -> bool :
@@ -94,7 +94,7 @@ class TestBench:
 
         return True
 
-    def ms_subscribe(self):
+    def ms_subscribe(self) -> None:
         # subscribe to server topics
         try:
             res = self.ms_host.ms_protocol.subscribe_all()
@@ -106,7 +106,7 @@ class TestBench:
             return
         self.ms_host.ms_protocol.set_unsolicited_message_processor(TestBench.unsolicited_handler)
 
-    def run_tests(self):
+    def run_tests(self) -> None:
         # Run the tests in sequence
         logger.info("TestBench.tests")
 
@@ -257,20 +257,20 @@ class TestBench:
                 payload = self.ms_host.ms_leds(LedOperation.ON, led)
                 rsp = payload.get("response","")
                 if rsp == "OK":
-                    tc.data[led.name + " set:"] = "PASS"
+                    tc.data[led.name + " set"] = "PASS"
                 else:
                     logger.info(f"Cannot set LED {led.name} to ON: %s", rsp)
-                    tc.data[led.name + " set:"] = "FAIL"
+                    tc.data[led.name + " set"] = "FAIL"
                     res = False
 
                 time.sleep(0.5)
 
                 self.ms_host.ms_leds(LedOperation.OFF, led)
                 if rsp == "OK":
-                    tc.data[led.name + " clear:"] = "PASS"
+                    tc.data[led.name + " clear"] = "PASS"
                 else:
                     logger.info(f"Cannot clear LED {led.name} to ON: %s", rsp)
-                    tc.data[led.name + " clear:"] = "FAIL"
+                    tc.data[led.name + " clear"] = "FAIL"
                     res = False
 
         tc.result = res
@@ -500,7 +500,7 @@ class TestBench:
         self.report.add_test_data(tc)
         return res
 
-    def t_monitor(self):
+    def t_monitor(self) -> bool:
         tc = TestCase("t_monitor")
         logger.info("Press Ctrl+C to stop monitoring")
         logger.setLevel(logging.WARNING)
@@ -580,14 +580,14 @@ class TestReport:
     total: int = 0
     result: bool = True
 
-    def create_prolog(self):
+    def create_prolog(self) -> None:
         self.timestamp = datetime.now(UTC).isoformat()
 
-    def add_test_data(self, tc: TestCase):
+    def add_test_data(self, tc: TestCase) -> None:
         if tc is not None:
             self.test_results.append(asdict(tc))
 
-    def add_epilog(self):
+    def add_epilog(self) -> None:
         tests = self.test_results
         passed = sum(
             1 for t in tests
@@ -602,7 +602,7 @@ class TestReport:
         self.total = len(tests)
         self.skipped = len(tests) - passed - failed
 
-    def dump_data(self):
+    def dump_data(self) -> None:
         print("\n=== TEST REPORT ===")
         print(f"Passed : {self.passed}")
         print(f"Failed : {self.failed}")
