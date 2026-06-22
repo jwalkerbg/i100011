@@ -47,7 +47,7 @@ def run_app(cfg:Config) -> None:
             appdispatcher = AppMQTTDispatcher(cfg.config)
             mqttms = MQTTms(cfg.config['mqttms'],cfg.config['logging'],appdispatcher)
         except Exception as e:
-            logger.error(f"Cannot create MQTTMS object. Giving up: {e}")
+            logger.error("Cannot create MQTTMS object. Giving up: %s", str(e), exc_info=cfg.config['logging']['exc_full_stack'])
             return
 
         # connect broker
@@ -58,7 +58,7 @@ def run_app(cfg:Config) -> None:
                 return
         except Exception as e:
             mqttms.graceful_exit()
-            logger.error(f"Cannot connect to MQTT broker: {e}.")
+            logger.error("Cannot connect to MQTT broker: %s", str(e), exc_info=cfg.config['logging']['exc_full_stack'])
             return
 
         # create ms_host object if all above went well
