@@ -14,4 +14,3 @@ class Led(IntFlag):
     BLUE = 0x08
     WHITE = 0x10
     ALL = GREEN | RED | YELLOW | BLUE | WHITE
-
