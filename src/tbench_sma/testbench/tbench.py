@@ -9,12 +9,11 @@ import re
 import json
 import logging
 from dataclasses import dataclass, field, asdict
-from copy import deepcopy
-from typing import Dict, Tuple, Any, Optional
+from typing import Any
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
-from tbench_sma.definitions import Device, DeviceAction, DeviceMode, Led, LedOperation, ApiCmd, ParFlags, SensorState, OutputState, ConnectivityState
+from tbench_sma.definitions import Device, DeviceAction, DeviceMode, Led, LedOperation
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 
