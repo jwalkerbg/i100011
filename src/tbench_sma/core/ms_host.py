@@ -1,5 +1,6 @@
 # ms_host.py
 
+import json
 import struct
 from  mqttms import MSProtocol
 from tbench_sma.logger import get_app_logger
@@ -17,7 +18,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -29,7 +30,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -41,7 +42,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -53,7 +54,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -76,7 +77,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -88,7 +89,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -117,7 +118,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -128,7 +129,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -148,7 +149,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -159,7 +160,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -183,7 +184,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -197,7 +198,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -213,7 +214,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -231,7 +232,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -242,7 +243,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -253,7 +254,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -264,7 +265,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -275,7 +276,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -286,7 +287,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -302,7 +303,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -315,7 +316,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
@@ -328,7 +329,7 @@ class MShost:
 
         self.ms_protocol.response_received.wait()
         payload = self.ms_protocol.response
-        logger.info(f"MSH response: {payload}")
+        logger.info("MSH response: %s",json.dumps(payload, separators=(",", ":")))
         self.ms_protocol.response_received.clear()
         return payload
 
