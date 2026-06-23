@@ -5,7 +5,7 @@ from typing import Dict, Tuple
 from mqttms import MQTTDispatcher
 from mqttms.core import MQTTms
 
-from tbench_sma.core.config import Config
+from tbench_sma.core.config import Config, ConfigDict
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 from tbench_sma.testbench.tbench import TestBench
@@ -13,8 +13,8 @@ from tbench_sma.testbench.tbench import TestBench
 logger = get_app_logger(__name__)
 
 class AppMQTTDispatcher(MQTTDispatcher):
-    def __init__(self, config: Dict):
-        super().__init__(config)
+    def __init__(self, config: ConfigDict):
+        super().__init__(dict(config))
 
     def handle_message(self, message: Tuple[str, str]) -> bool:
         if not super().handle_message(message):
@@ -45,7 +45,7 @@ def run_app(cfg:Config) -> None:
         # create MQTTms mqttms object to work with
         try:
             appdispatcher = AppMQTTDispatcher(cfg.config)
-            mqttms = MQTTms(cfg.config['mqttms'],cfg.config['logging'],appdispatcher)
+            mqttms = MQTTms(dict(cfg.config['mqttms']),dict(cfg.config['logging']),appdispatcher)
         except Exception as e:
             logger.error("Cannot create MQTTMS object. Giving up: %s", str(e), exc_info=cfg.config['logging']['exc_full_stack'])
             return

@@ -14,6 +14,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.validation import Validator, ValidationError
 
 from tbench_sma.definitions import Device, DeviceAction, DeviceMode, Led, LedOperation
+from tbench_sma.core.config import Config, ConfigDict
 from tbench_sma.logger import get_app_logger
 from tbench_sma.core.ms_host import MShost
 
@@ -47,7 +48,7 @@ class TestBench:
     ir_q: queue.Queue = queue.Queue()
     devstate_q: queue.Queue = queue.Queue()
 
-    def __init__(self, config: dict):
+    def __init__(self, config: ConfigDict):
         self.config = config
         self.tests = [
                 (self.t_who_am_i, "Who Am I" ),
