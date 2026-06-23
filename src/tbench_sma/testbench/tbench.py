@@ -645,8 +645,8 @@ class TestReport:
         if config['report']['report_dest'] == "db":
             logger.verbose("Save report to database is not implemented")
 
-        if config['report']['report_format'] == 'json':
-            self.to_json()
-
-        if config['report']['report_format'] == 'yaml':
-            self.to_yaml()
+        if config['report']['report_dest'] == "file":
+            if config['report']['report_format'] == 'json':
+                self.to_json()
+            if config['report']['report_format'] == 'yaml':
+                self.to_yaml()
