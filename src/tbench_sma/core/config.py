@@ -618,14 +618,17 @@ def parse_args() -> argparse.Namespace:
     interactive_group.add_argument('--interactive', dest='interactive', action='store_const', const=True, help='Enable interactive mode (default)')
     interactive_group.add_argument('--no-interactive', dest='interactive', action='store_const', const=False, help='Disable interactive mode')
 
-    operative_group.add_argument("--pairing", dest='pairing', action='store_const', const=True, help="Execute pairing procedure. Assumes DUT has no valid WiFi credentials.")
-    operative_group.add_argument("--no-pairing", dest='pairing', action='store_const', const=False, help="Do not execute pairing procedure. Assumes DUT already has valid WiFi credentials.")
+    paring_group = operative_group.add_mutually_exclusive_group()
+    paring_group.add_argument("--pairing", dest='pairing', action='store_const', const=True, help="Execute pairing procedure. Assumes DUT has no valid WiFi credentials.")
+    paring_group.add_argument("--no-pairing", dest='pairing', action='store_const', const=False, help="Do not execute pairing procedure. Assumes DUT already has valid WiFi credentials.")
 
-    operative_group.add_argument("--reset-wifi", dest='resetwifi', action='store_const', const=True, help="Reset WiFi credentials on the DUT")
-    operative_group.add_argument("--no-reset-wifi", dest='resetwifi', action='store_const', const=False, help="Do not reset WiFi credentials on the DUT")
+    reset_wifi_group = operative_group.add_mutually_exclusive_group()
+    reset_wifi_group.add_argument("--reset-wifi", dest='resetwifi', action='store_const', const=True, help="Reset WiFi credentials on the DUT")
+    reset_wifi_group.add_argument("--no-reset-wifi", dest='resetwifi', action='store_const', const=False, help="Do not reset WiFi credentials on the DUT")
 
-    operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
-    operative_group.add_argument("--no-stop-if-failed", dest='stop_if_failed', action='store_const', const=False, help="Continue execution of tests even if current test failed")
+    stop_if_failed_grop = operative_group.add_mutually_exclusive_group()
+    stop_if_failed_grop.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
+    stop_if_failed_grop.add_argument("--no-stop-if-failed", dest='stop_if_failed', action='store_const', const=False, help="Continue execution of tests even if current test failed")
 
     report_group = parser.add_argument_group('Report Options')
     report_save_group = report_group.add_mutually_exclusive_group()
