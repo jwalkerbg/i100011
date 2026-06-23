@@ -57,6 +57,12 @@ class OptionsConfig(TypedDict, total=False):
     resetwifi: bool
     stop_if_failed: bool
 
+class ReportConfig(TypedDict, total=False):
+    save_report: bool
+    report_format: str
+    report_dest: str
+    report_path: str
+
 class ConfigDict(TypedDict):
     template: TemplateConfig
     logging: LoggingConfig
@@ -64,6 +70,7 @@ class ConfigDict(TypedDict):
     dut: DutConfig
     tests: TestsConfig
     options: OptionsConfig
+    report: ReportConfig
 
 class Config:
     def __init__(self) -> None:
@@ -134,6 +141,12 @@ class Config:
             "pairing": False,
             "resetwifi": True,
             "stop_if_failed": False
+        },
+        "report": {
+            "save_report": False,
+            "report_format": "json",
+            "report_dest": "file",
+            "report_path": "reports"
         }
     }
 
@@ -249,6 +262,23 @@ class Config:
                     "pairing": {"type": "boolean"},
                     "resetwifi": {"type": "boolean"},
                     "stop_if_failed": {"type": "boolean"}
+                }
+            },
+            "report": {
+                "type": "object",
+                "properties": {
+                    "save_report": {"type": "boolean"},
+                    "report_format": {
+                        "type": "string",
+                        "enum": ["json", "yaml"]
+                    },
+                    "report_dest": {
+                        "type": "string",
+                        "enum": ["file", "db"]
+                    },
+                    "report_path": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -423,6 +453,15 @@ class Config:
             if config_cli.stop_if_failed is not None:
                 self.config['options']['stop_if_failed'] = config_cli.stop_if_failed
 
+            if config_cli.save_report is not None:
+                self.config['report']['save_report'] = config_cli.save_report
+            if config_cli.report_format is not None:
+                self.config['report']['report_format'] = config_cli.report_format
+            if config_cli.report_dest is not None:
+                self.config['report']['report_dest'] = config_cli.report_dest
+            if config_cli.report_path is not None:
+                self.config['report']['report_path'] = config_cli.report_path
+
         return self.config
 
 valid_modes = ['testbench', 'monitor', 'snonly', 'reset-wifi']
@@ -587,6 +626,14 @@ def parse_args() -> argparse.Namespace:
 
     operative_group.add_argument("--stop-if-failed", dest='stop_if_failed', action='store_const', const=True, help="Stop execution of tests if current test failed")
     operative_group.add_argument("--no-stop-if-failed", dest='stop_if_failed', action='store_const', const=False, help="Continue execution of tests even if current test failed")
+
+    report_group = parser.add_argument_group('Report Options')
+    report_save_group = report_group.add_mutually_exclusive_group()
+    report_save_group.add_argument("--save-report", dest='save_report', action='store_const', const=True, help="Save test report into a file or a database")
+    report_save_group.add_argument("--no-save-report", dest='save_report', action='store_const', const=False, help="Do not save test report")
+    report_group.add_argument("--report-format", dest='report_format', choices=["json", "yaml"], help="Select output format for test report")
+    report_group.add_argument("--report-dest", dest='report_dest', choices=["file", "db"], help="Select output destination for test report")
+    report_group.add_argument("--report-path", dest='report_path', help="Select output path (directory) where reports are saved")
 
     return parser.parse_args()
 

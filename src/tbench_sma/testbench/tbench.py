@@ -7,6 +7,8 @@ import struct
 import queue
 import re
 import json
+import yaml
+from pathlib import Path
 import logging
 from dataclasses import dataclass, field, asdict
 from typing import Any
@@ -112,7 +114,8 @@ class TestBench:
 
         self.ms_subscribe()
 
-        self.report = TestReport(self.config["mqttms"]["ms"]["server_uuid"])
+        self.report = TestReport(uuid=self.config["mqttms"]["ms"]["server_uuid"],
+                                 reppath=self.config["report"]["report_path"])
 
         match self.config["options"]["mode"]:
             case "snonly":
@@ -152,6 +155,7 @@ class TestBench:
 
         self.report.add_epilog()
         self.report.dump_data()
+        self.report.save_report(self.config)
 
     def reset_wifi_credentials(self) -> bool:
         payload = self.ms_host.ms_wificred("*","*")
@@ -569,6 +573,7 @@ class TestCase:
 @dataclass
 class TestReport:
     uuid: str = ""
+    reppath: str = ""
     serialn: str = ""
     timestamp: str = ""
     test_results: list = field(default_factory=list)
@@ -613,3 +618,35 @@ class TestReport:
 
         print("\n=== JSON ===")
         print(json.dumps(asdict(self), indent=2))
+
+    def to_dict(self):
+        return asdict(self)
+
+    def build_report_path(self, fmt: str) -> Path:
+        ext = "json" if fmt == "json" else "yaml"
+        return Path(self.reppath) / f"{self.uuid}.{ext}"
+
+    def to_json(self):
+        path = self.build_report_path("json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(self.to_dict(), f, indent=4)
+        return path
+
+    def to_yaml(self):
+        path = self.build_report_path("yaml")
+        with open(path, "w", encoding="utf-8") as f:
+            yaml.safe_dump(self.to_dict(), f, sort_keys=False)
+        return path
+
+    def save_report(self, config: dict):
+        if config['report']['save_report'] == False:
+            return
+
+        if config['report']['report_dest'] == "db":
+            logger.verbose("Save report to database is not implemented")
+
+        if config['report']['report_format'] == 'json':
+            self.to_json()
+
+        if config['report']['report_format'] == 'yaml':
+            self.to_yaml()
