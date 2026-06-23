@@ -123,7 +123,7 @@ string_handler_instance = None  # global to reuse
 def setup_logging(verbosity: int = 3,
                   log_prefix: bool = True,
                   use_color: bool = True,
-                  use_string_handler: bool = False):
+                  use_string_handler: bool = False) -> None:
     """
     Configure logging with custom levels, prefix toggle, color output,
     and optional string handler.
@@ -180,8 +180,6 @@ def setup_logging(verbosity: int = 3,
 
         string_handler_instance.setLevel(level)
         string_handler_instance.setFormatter(formatter)
-
-    return string_handler_instance
 
 def get_app_logger(area_tag: str) -> logging.Logger:
     """
