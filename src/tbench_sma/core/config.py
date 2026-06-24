@@ -677,27 +677,3 @@ def get_app_configuration() -> Config:
     config_instance.merge_cli_options(args)
 
     return config_instance
-
-def log_configuration(self):
-    logger.info("Running in verbose mode.")
-
-    # MQTT configuration
-    mqtt_config = self.config['mqttms']['mqtt']
-    logger.info("MQTT Configuration:")
-    logger.info("  Host: %s",mqtt_config['host'])
-    logger.info("  Port: %d",mqtt_config['port'])
-    logger.info("  Username: %s",mqtt_config.get('username', 'N/A'))
-    logger.info("  Password: %s",mqtt_config.get('password', 'N/A'))
-    logger.info("  Client ID: %s",mqtt_config.get('client_id', 'N/A'))
-    logger.info("  Timeout: %d",mqtt_config.get('timeout', 'N/A'))
-    logger.info("  Long payloads threshold: %d",mqtt_config.get('long_payload', 'N/A'))
-
-    ms_config = self.config['mqttms']['ms']
-    logger.info("MS Configuration")
-    logger.info("  Client (master) UUID: %s",ms_config.get('client_uuid', 'N/A'))
-    logger.info("  Server (slave) UUID:  %s",ms_config.get('server_uuid', 'N/A'))
-    logger.info("  Command topic:  %s",ms_config.get('cmd_topic', 'N/A'))
-    logger.info("  Response topic: %s",ms_config.get('rsp_topic', 'N/A'))
-    logger.info("  MS protocol timeout: %f",ms_config.get('timeout', 'N/A'))
-
-    logger.info("Application started with the above configuration...")
