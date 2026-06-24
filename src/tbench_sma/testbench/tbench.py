@@ -624,7 +624,7 @@ class TestReport:
 
     def build_report_path(self, fmt: str) -> Path:
         ext = "json" if fmt == "json" else "yaml"
-        return Path(self.reppath) / f"{self.uuid}.{ext}"
+        return Path(self.reppath) / f"{self.serialn}-{self.uuid}.{ext}"
 
     def to_json(self):
         path = self.build_report_path("json")
