@@ -1,5 +1,6 @@
 # core/config.py
 
+import os
 import sys
 from typing import Dict, Any, Mapping, TypedDict
 import argparse
@@ -355,7 +356,9 @@ class Config:
         :return: Updated configuration dictionary
         """
         env_overrides = {
-
+            "report": {
+                "report_path": os.getenv("SMA_REPORT_PATH")
+            }
         }
         self.deep_update(config=self.config, config_file=env_overrides)
 
