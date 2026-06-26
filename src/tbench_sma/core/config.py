@@ -47,6 +47,9 @@ class TestsConfig(TypedDict, total=False):
     ionizeron: float
     repelleron: float
     buttontime: float
+    amb_thr: float
+    amb_low: float
+    amb_high: float
 
 class OptionsConfig(TypedDict, total=False):
     mode: str
@@ -131,7 +134,11 @@ class Config:
             "heateron": 3.0,
             "ionizeron": 3.0,
             "repelleron": 3.0,
-            "buttontime": 10.0
+            "buttontime": 10.0,
+            "amb_thr": 750.0,
+            "amb_low": 0.0,
+            "amb_high": 2000.0
+
         },
         "options": {
             "mode": "testbench",
@@ -249,7 +256,10 @@ class Config:
                     "heateron": {"type": "number"},
                     "ionizeron": {"type": "number"},
                     "repelleron": {"type": "number"},
-                    "buttontime": {"type": "number"}
+                    "buttontime": {"type": "number"},
+                    "amb_thr": {"type": "number"},
+                    "amb_low": {"type": "number"},
+                    "amb_high": {"type": "number"}
                 }
             },
             "options": {
@@ -437,6 +447,12 @@ class Config:
                 self.config['tests']['repelleron'] = config_cli.repelleron
             if config_cli.buttontime is not None:
                 self.config['tests']['buttontime'] = config_cli.buttontime
+            if config_cli.amb_thr is not None:
+                self.config['tests']['amb_thr'] = config_cli.amb_thr
+            if config_cli.amb_low is not None:
+                self.config['tests']['amb_low'] = config_cli.amb_low
+            if config_cli.amb_high is not None:
+                self.config['tests']['amb_high'] = config_cli.amb_high
 
             # operatione options
             if config_cli.mode is not None:
@@ -609,6 +625,9 @@ def parse_args() -> argparse.Namespace:
     tests_group.add_argument("--ionizeron", type=float, dest='ionizeron', help="Time to maintain ionizer enabled in tests")
     tests_group.add_argument("--repelleron", type=float, dest='repelleron', help="Time to maintain repeller enabled in tests")
     tests_group.add_argument("--buttontime", type=float, dest='buttontime', help="Time to wait for button and IR events in tests")
+    tests_group.add_argument("--amb-thr", type=float, dest="amb_thr", help="Ambient loght threshold (the lesser the darker)")
+    tests_group.add_argument("--amb-low", type=float, dest="amb_low", help="Ambient loght reasonable lowest value")
+    tests_group.add_argument("--amb-high", type=float, dest="amb_high", help="Ambient loght reasonable highest value")
 
     # operative options
     operative_group = parser.add_argument_group('Operative Options')
