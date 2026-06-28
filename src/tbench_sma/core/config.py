@@ -50,6 +50,21 @@ class TestsConfig(TypedDict, total=False):
     amb_thr: float
     amb_low: float
     amb_high: float
+    co_thr: float
+    co_low: float
+    co_max: float
+    temp_thr: float
+    temp_low: float
+    temp_high: float
+    press_thr: float
+    press_low: float
+    press_high: float
+    hum_thr: float
+    hum_low: float
+    hum_high: float
+    air_thr: float
+    air_low : float
+    air_high: float
 
 class OptionsConfig(TypedDict, total=False):
     mode: str
@@ -137,8 +152,22 @@ class Config:
             "buttontime": 10.0,
             "amb_thr": 750.0,
             "amb_low": 0.0,
-            "amb_high": 2000.0
-
+            "amb_high": 2000.0,
+            "co_thr": 9,
+            "co_low": 0,
+            "co_max": 1200,
+            "temp_thr": 2300,
+            "temp_low": 0,
+            "temp_high": 4500,
+            "press_thr": 99000,
+            "press_low": 60000,
+            "press_high": 110000,
+            "hum_thr": 75000,
+            "hum_low": 0,
+            "hum_high": 100000,
+            "air_thr": 16000,
+            "air_low": 500,
+            "air_high": 100000
         },
         "options": {
             "mode": "testbench",
@@ -259,7 +288,22 @@ class Config:
                     "buttontime": {"type": "number"},
                     "amb_thr": {"type": "number"},
                     "amb_low": {"type": "number"},
-                    "amb_high": {"type": "number"}
+                    "amb_high": {"type": "number"},
+                    "co_thr": {"type": "number"},
+                    "co_low": {"type": "number"},
+                    "co_max": {"type": "number"},
+                    "temp_thr": {"type": "number"},
+                    "temp_low": {"type": "number"},
+                    "temp_high": {"type": "number"},
+                    "press_thr": {"type": "number"},
+                    "press_low": {"type": "number"},
+                    "press_high": {"type": "number"},
+                    "hum_thr": {"type": "number"},
+                    "hum_low": {"type": "number"},
+                    "hum_high": {"type": "number"},
+                    "air_thr": {"type": "number"},
+                    "air_low": {"type": "number"},
+                    "air_high": {"type": "number"}
                 }
             },
             "options": {
@@ -453,6 +497,36 @@ class Config:
                 self.config['tests']['amb_low'] = config_cli.amb_low
             if config_cli.amb_high is not None:
                 self.config['tests']['amb_high'] = config_cli.amb_high
+            if config_cli.co_thr is not None:
+                self.config['tests']['co_thr'] = config_cli.co_thr
+            if config_cli.co_low is not None:
+                self.config['tests']['co_low'] = config_cli.co_low
+            if config_cli.co_max is not None:
+                self.config['tests']['co_max'] = config_cli.co_max
+            if config_cli.temp_thr is not None:
+                self.config['tests']['temp_thr'] = config_cli.temp_thr
+            if config_cli.temp_low is not None:
+                self.config['tests']['temp_low'] = config_cli.temp_low
+            if config_cli.temp_high is not None:
+                self.config['tests']['temp_high'] = config_cli.temp_high
+            if config_cli.press_thr is not None:
+                self.config['tests']['press_thr'] = config_cli.press_thr
+            if config_cli.press_low is not None:
+                self.config['tests']['press_low'] = config_cli.press_low
+            if config_cli.press_high is not None:
+                self.config['tests']['press_high'] = config_cli.press_high
+            if config_cli.hum_thr is not None:
+                self.config['tests']['hum_thr'] = config_cli.hum_thr
+            if config_cli.hum_low is not None:
+                self.config['tests']['hum_low'] = config_cli.hum_low
+            if config_cli.hum_high is not None:
+                self.config['tests']['hum_high'] = config_cli.hum_high
+            if config_cli.air_thr is not None:
+                self.config['tests']['air_thr'] = config_cli.air_thr
+            if config_cli.air_low is not None:
+                self.config['tests']['air_low'] = config_cli.air_low
+            if config_cli.air_high is not None:
+                self.config['tests']['air_high'] = config_cli.air_high
 
             # operatione options
             if config_cli.mode is not None:
@@ -625,9 +699,25 @@ def parse_args() -> argparse.Namespace:
     tests_group.add_argument("--ionizeron", type=float, dest='ionizeron', help="Time to maintain ionizer enabled in tests")
     tests_group.add_argument("--repelleron", type=float, dest='repelleron', help="Time to maintain repeller enabled in tests")
     tests_group.add_argument("--buttontime", type=float, dest='buttontime', help="Time to wait for button and IR events in tests")
-    tests_group.add_argument("--amb-thr", type=float, dest="amb_thr", help="Ambient loght threshold (the lesser the darker)")
-    tests_group.add_argument("--amb-low", type=float, dest="amb_low", help="Ambient loght reasonable lowest value")
-    tests_group.add_argument("--amb-high", type=float, dest="amb_high", help="Ambient loght reasonable highest value")
+
+    tests_group.add_argument("--amb-thr", type=float, dest="amb_thr", help="Ambient light threshold (the lesser the darker)")
+    tests_group.add_argument("--amb-low", type=float, dest="amb_low", help="Ambient light reasonable lowest value")
+    tests_group.add_argument("--amb-high", type=float, dest="amb_high", help="Ambient light reasonable highest value")
+    tests_group.add_argument("--co-thr", type=float, dest='co_thr', help="threshold")
+    tests_group.add_argument("--co-low", type=float, dest='co_low', help="reasonable lowest value")
+    tests_group.add_argument("--co-max", type=float, dest='co_high', help="reasonable highest value")
+    tests_group.add_argument("--temp-thr", type=float, dest='temp_thr', help="threshold")
+    tests_group.add_argument("--temp-low", type=float, dest='temp_low', help="reasonable lowest value")
+    tests_group.add_argument("--temp-high", type=float, dest='temp_high', help="reasonable highest value")
+    tests_group.add_argument("--press-thr", type=float, dest='press_thr', help="threshold")
+    tests_group.add_argument("--press-low", type=float, dest='press_low', help="reasonable lowest value")
+    tests_group.add_argument("--press-high", type=float, dest='press_high', help="reasonable highest value")
+    tests_group.add_argument("--hum-thr", type=float, dest='hum_thr', help="threshold")
+    tests_group.add_argument("--hum-low", type=float, dest='hum_low', help="reasonable lowest value")
+    tests_group.add_argument("--hum-high", type=float, dest='hum_high', help="reasonable highest value")
+    tests_group.add_argument("--air-thr", type=float, dest='air_thr', help="threshold")
+    tests_group.add_argument("--air-low", type=float, dest='air_low', help="reasonable lowest value")
+    tests_group.add_argument("--air-high", type=float, dest='air_high', help="reasonable highest value")
 
     # operative options
     operative_group = parser.add_argument_group('Operative Options')
