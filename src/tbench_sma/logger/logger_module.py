@@ -26,10 +26,22 @@ class CustomFormatter(logging.Formatter):
         return log_message
 
 # ================================================================
-#  Custom log levels: VERBOSE(15) and QUIET(25)
+#  Standard levels from logging module
+#  CRITICAL = 50
+#  FATAL = CRITICAL
+#  ERROR = 40
+#  WARNING = 30
+#  WARN = WARNING
+#    QUIET
+#  INFO = 20
+#    VERBOSE
+#  DEBUG = 10
+#  NOTSET = 0
+#
+#  Custom log levels: QUIET(25) and VERBOSE(15)
 # ================================================================
-QUIET_LEVEL = 25
 VERBOSE_LEVEL = 15
+QUIET_LEVEL = 25
 
 if not hasattr(logging, "QUIET"):
     logging.addLevelName(QUIET_LEVEL, "QUIET")
