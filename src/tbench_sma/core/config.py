@@ -52,7 +52,7 @@ class TestsConfig(TypedDict, total=False):
     amb_high: float
     co_thr: float
     co_low: float
-    co_max: float
+    co_high: float
     temp_thr: float
     temp_low: float
     temp_high: float
@@ -155,7 +155,7 @@ class Config:
             "amb_high": 2000.0,
             "co_thr": 9,
             "co_low": 0,
-            "co_max": 1200,
+            "co_high": 1200,
             "temp_thr": 2300,
             "temp_low": 0,
             "temp_high": 4500,
@@ -291,7 +291,7 @@ class Config:
                     "amb_high": {"type": "number"},
                     "co_thr": {"type": "number"},
                     "co_low": {"type": "number"},
-                    "co_max": {"type": "number"},
+                    "co_high": {"type": "number"},
                     "temp_thr": {"type": "number"},
                     "temp_low": {"type": "number"},
                     "temp_high": {"type": "number"},
@@ -501,8 +501,8 @@ class Config:
                 self.config['tests']['co_thr'] = config_cli.co_thr
             if config_cli.co_low is not None:
                 self.config['tests']['co_low'] = config_cli.co_low
-            if config_cli.co_max is not None:
-                self.config['tests']['co_max'] = config_cli.co_max
+            if config_cli.co_high is not None:
+                self.config['tests']['co_high'] = config_cli.co_high
             if config_cli.temp_thr is not None:
                 self.config['tests']['temp_thr'] = config_cli.temp_thr
             if config_cli.temp_low is not None:
