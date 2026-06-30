@@ -697,7 +697,7 @@ class TestReport:
             return
 
         if config['report']['report_dest'] == "db":
-            logger.verbose("Save report to database is not implemented")
+            logger.warning("Save report to database is not implemented")
 
         if config['report']['report_dest'] == "file":
             if config['report']['report_format'] == 'json':
