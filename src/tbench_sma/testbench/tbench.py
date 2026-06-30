@@ -309,15 +309,17 @@ class TestBench:
     def t_leds(self) -> bool:
         tc = TestCase("t_leds")
         res = True
-        for _ in range(1):
+        loops = self.config['tests']['ledloops']
+        for loopnum in range(1, loops + 1):
+            logger.quiet("LED Loop %u",loopnum)
             for led in Led:
                 payload = self.ms_host.ms_leds(LedOperation.ON, led)
                 rsp = payload.get("response","")
                 if rsp == "OK":
-                    logger.quiet(f"LED {led.name} set to ON")
+                    logger.quiet("LED %s set to ON", led.name)
                     tc.data[led.name + " set"] = "PASS"
                 else:
-                    logger.warning(f"Cannot set LED {led.name} to ON: %s", rsp)
+                    logger.warning("Cannot set LED %s to ON: %s", led.name, rsp)
                     tc.data[led.name + " set"] = "FAIL"
                     res = False
 
@@ -325,10 +327,10 @@ class TestBench:
 
                 self.ms_host.ms_leds(LedOperation.OFF, led)
                 if rsp == "OK":
-                    logger.quiet(f"LED {led.name} set to OFF")
+                    logger.quiet("LED %s set to OFF", led.name)
                     tc.data[led.name + " clear"] = "PASS"
                 else:
-                    logger.warning(f"Cannot clear LED {led.name} to ON: %s", rsp)
+                    logger.warning("Cannot clear LED %s to ON: %s", led.name, rsp)
                     tc.data[led.name + " clear"] = "FAIL"
                     res = False
 

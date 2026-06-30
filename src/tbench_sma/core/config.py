@@ -48,6 +48,7 @@ class TestsConfig(TypedDict, total=False):
     ionizeron: float
     repelleron: float
     buttontime: float
+    ledloops: int
     amb_thr: float
     amb_low: float
     amb_high: float
@@ -152,6 +153,7 @@ class Config:
             "ionizeron": 3.0,
             "repelleron": 3.0,
             "buttontime": 10.0,
+            "ledloops": 1,
             "amb_thr": 750.0,
             "amb_low": 0.0,
             "amb_high": 4095.0,
@@ -289,6 +291,7 @@ class Config:
                     "ionizeron": {"type": "number"},
                     "repelleron": {"type": "number"},
                     "buttontime": {"type": "number"},
+                    "ledloops": {"type": "number"},
                     "amb_thr": {"type": "number"},
                     "amb_low": {"type": "number"},
                     "amb_high": {"type": "number"},
@@ -496,6 +499,8 @@ class Config:
                 self.config['tests']['repelleron'] = config_cli.repelleron
             if config_cli.buttontime is not None:
                 self.config['tests']['buttontime'] = config_cli.buttontime
+            if config_cli.ledloops is not None:
+                self.config['tests']['ledloops'] = config_cli.ledloops
             if config_cli.amb_thr is not None:
                 self.config['tests']['amb_thr'] = config_cli.amb_thr
             if config_cli.amb_low is not None:
@@ -705,6 +710,7 @@ def parse_args() -> argparse.Namespace:
     tests_group.add_argument("--ionizeron", type=float, dest='ionizeron', help="Time to maintain ionizer enabled in tests")
     tests_group.add_argument("--repelleron", type=float, dest='repelleron', help="Time to maintain repeller enabled in tests")
     tests_group.add_argument("--buttontime", type=float, dest='buttontime', help="Time to wait for button and IR events in tests")
+    tests_group.add_argument("--ledloops", type=int, dest='ledloops', help="How many times to cycle leds in t_leds")
 
     tests_group.add_argument("--amb-thr", type=float, dest="amb_thr", help="Ambient light threshold (the lesser the darker)")
     tests_group.add_argument("--amb-low", type=float, dest="amb_low", help="Ambient light reasonable lowest value")
