@@ -245,13 +245,49 @@ class TestBench:
 
                     # check for reasonable data
                     tc.result = True
+
                     amb = raw.get("amb",-1)
                     if amb < self.config["tests"]["amb_low"] or amb > self.config["tests"]["amb_high"]:
                         tc.data["ambient"] = f"Not reasonable sensor value. Not in [{self.config['tests']['amb_low']} .. {self.config['tests']['amb_high']}]"
                         tc.result = False
                     else:
                         tc.data["ambient_state"] = "dark" if amb < self.config["tests"]["amb_thr"] else "light"
-                        tc.result = True
+
+                    co = raw.get("co", -1)
+                    if co < self.config["tests"]["co_low"] or co > self.config["tests"]["co_high"]:
+                        tc.data["problem_cosensor"] = f"Not reasonable CO sensor value. Not in [{self.config['tests']['co_low']} .. {self.config['tests']['co_high']}]"
+                        tc.result = False
+                    else:
+                        tc.data["co_state"] = "normal" if co < self.config["tests"]["co_thr"] else "abnormal"
+
+                    temp = raw.get("temp", -1)
+                    if temp < self.config["tests"]["temp_low"] or temp > self.config["tests"]["temp_high"]:
+                        tc.data["problem_temperature"] = f"Not reasonable Temperature sensor value. Not in [{self.config['tests']['temp_low']} .. {self.config['tests']['temp_high']}]"
+                        tc.result = False
+                    else:
+                        tc.data["temp_state"] = "cold" if temp < self.config["tests"]["temp_thr"] else "hot"
+
+                    press = raw.get("press", -1)
+                    if press < self.config["tests"]["press_low"] or press > self.config["tests"]["press_high"]:
+                        tc.data["problem_pressure"] = f"Not reasonable Pressure sensor value. Not in [{self.config['tests']['press_low']} .. {self.config['tests']['press_high']}]"
+                        tc.result = False
+                    else:
+                        tc.data["press_state"] = "low" if press < self.config["tests"]["press_thr"] else "high"
+
+                    hum = raw.get("hum", -1)
+                    if hum < self.config["tests"]["hum_low"] or hum > self.config["tests"]["hum_high"]:
+                        tc.data["problem_humidity"] = f"Not reasonable Humidity sensor value. Not in [{self.config['tests']['hum_low']} .. {self.config['tests']['hum_high']}]"
+                        tc.result = False
+                    else:
+                        tc.data["hum_state"] = "low" if hum < self.config["tests"]["hum_thr"] else "high"
+
+                    air = raw.get("air", -1)
+                    if air < self.config["tests"]["air_low"] or air > self.config["tests"]["air_high"]:
+                        tc.data["problem_air_quality"] = f"Not reasonable Air Quality sensor value. Not in [{self.config['tests']['air_low']} .. {self.config['tests']['air_high']}]"
+                        tc.result = False
+                    else:
+                        tc.data["air_state"] = "good" if air < self.config["tests"]["air_thr"] else "bad"
+
                     break
 
         self.report.add_test_data(tc)
