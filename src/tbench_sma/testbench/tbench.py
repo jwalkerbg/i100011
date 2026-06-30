@@ -299,7 +299,7 @@ class TestBench:
                         tc.data["problem_air_quality"] = f"Not reasonable Air Quality sensor value. Not in [{self.config['tests']['air_low']} .. {self.config['tests']['air_high']}]"
                         tc.result = False
                     else:
-                        tc.data["air_state"] = "good" if air < self.config["tests"]["air_thr"] else "bad"
+                        tc.data["air_state"] = "good" if air >= self.config["tests"]["air_thr"] else "bad"
 
                     break
 
