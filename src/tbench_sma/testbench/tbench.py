@@ -183,11 +183,15 @@ class TestBench:
             format_string = '<B'
             bdata = bytes.fromhex(jdata)
             unpacked_data = struct.unpack(format_string, bdata)
-            logger.quiet("Device ID: %02x",unpacked_data[0])
-            tc.result = True
-            tc.data['Device code'] = unpacked_data[0]
+            devicecode = self.config.get('dut',{}).get('devicecode',0)
+            logger.quiet("Device ID: %u, from config: %u",unpacked_data[0], devicecode)
+            if unpacked_data[0] == devicecode:
+                tc.result = True
+            else:
+                tc.result = False
+            tc.data['devicecode'] = unpacked_data[0]
             self.report.add_test_data(tc)
-            return True
+            return tc.result
 
         tc.result = False
         tc.data['code'] = 0
