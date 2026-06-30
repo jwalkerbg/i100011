@@ -165,10 +165,10 @@ class TestBench:
         return False
 
     def form_serialn_string(self) -> str:
-        idn = self.config.get("dut").get("ident")
-        serial_date = self.config.get("dut").get("serial_date")
-        serialn = self.config.get("dut").get("serialn")
-        serial_separator =  self.config.get("dut").get("serial_separator")
+        idn = self.config.get("dut",{}).get("ident")
+        serial_date = self.config.get("dut",{}).get("serial_date")
+        serialn = self.config.get("dut",{}).get("serialn")
+        serial_separator =  self.config.get("dut",{}).get("serial_separator")
         snstr = idn + serial_separator + serial_date + serial_separator + serialn
         return snstr
 
