@@ -43,6 +43,7 @@ heateron = 2.0          # time to maintain heater in ON state in tests
 ionizeron = 2.0         # time to maintain ionizer in ON state in tests
 repelleron = 2.0        # time to maintain ultra repeller in ON state in tests
 buttontime = 10.0       # time to wait for user to press the local button and IR remote control button
+ledloops = 1            # how many times to cycle leds in t_leds
 amb_thr = 750           # ambient threshold between light and dark (the lesser the darker)
 amb_low = 0             # reasonable lowest value
 amb_high = 4095         # reasonable highest value
