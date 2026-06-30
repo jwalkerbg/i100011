@@ -36,6 +36,7 @@ class MqttmsConfig(TypedDict, total=False):
 class DutConfig(TypedDict, total=False):
     ident: str
     name: str
+    devicecode: int
     serial_date: str
     serialn: str
     serial_separator: str
@@ -139,6 +140,7 @@ class Config:
         "dut": {
             "ident": "999999",
             "name": "device",
+            "devicecode": 90,
             "serial_date": "2501",
             "serialn": "0000001",
             "serial_separator": "-"
@@ -272,6 +274,7 @@ class Config:
                 "properties": {
                     "ident": { "type": "string"},
                     "name": { "type": "string" },
+                    "devicecode": { "type": "number" },
                     "serial_date": { "type": "string"},
                     "serialn": { "type": "string"},
                     "serial_separator": { "type": "string" }
@@ -471,6 +474,8 @@ class Config:
                 self.config['dut']['ident'] = config_cli.dut_ident
             if config_cli.dut_name is not None:
                 self.config['dut']['name'] = config_cli.dut_name
+            if config_cli.dut_devicecode is not None:
+                self.config['dut']['devicecode'] = config_cli.dut_devicecode
             if config_cli.dut_serial_date is not None:
                 self.config['dut']['serial_date'] = config_cli.dut_serial_date
             if config_cli.dut_serialn is not None:
@@ -687,6 +692,7 @@ def parse_args() -> argparse.Namespace:
     dut_group = parser.add_argument_group('DUT Data')
     dut_group.add_argument("--dut-ident", type=str, dest='dut_ident', help="ID Number of Device Under Test")
     dut_group.add_argument("--dut-name", type=str, dest='dut_name', help="Device name")
+    dut_group.add_argument("--dut-devicecode", type=int, dest="dut_devicecode", help="Device code (single byte integer value)")
     dut_group.add_argument("--dut-serial-date", type=str, dest='dut_serial_date', help="Date as part of serial number")
     dut_group.add_argument("--dut-serialn", type=str, dest='dut_serialn', help="Serial number of the Device Under Test")
     dut_group.add_argument("--dut-sn-separator", type=str, dest='serial_separator', help="Separator string or symbol used to separate parts of the serial number")
