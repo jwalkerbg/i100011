@@ -113,7 +113,8 @@ class TestBench:
         self.ms_subscribe()
 
         self.report = TestReport(uuid=self.config["mqttms"]["ms"]["server_uuid"],
-                                 reppath=self.config["report"]["report_path"])
+                                 reppath=self.config["report"]["report_path"],
+                                 serialn=self.form_serialn_string())
 
         match self.config["options"]["mode"]:
             case "snonly":
@@ -162,6 +163,14 @@ class TestBench:
             return True
         logger.info("WiFi credentials were not cleared")
         return False
+
+    def form_serialn_string(self) -> str:
+        idn = self.config.get("dut").get("ident")
+        serial_date = self.config.get("dut").get("serial_date")
+        serialn = self.config.get("dut").get("serialn")
+        serial_separator =  self.config.get("dut").get("serial_separator")
+        snstr = idn + serial_separator + serial_date + serial_separator + serialn
+        return snstr
 
     # tests
 
@@ -248,7 +257,7 @@ class TestBench:
 
                     amb = raw.get("amb",-1)
                     if amb < self.config["tests"]["amb_low"] or amb > self.config["tests"]["amb_high"]:
-                        tc.data["ambient"] = f"Not reasonable sensor value. Not in [{self.config['tests']['amb_low']} .. {self.config['tests']['amb_high']}]"
+                        tc.data["problem_ambient"] = f"Not ambient sensor reasonable value. Not in [{self.config['tests']['amb_low']} .. {self.config['tests']['amb_high']}]"
                         tc.result = False
                     else:
                         tc.data["ambient_state"] = "dark" if amb < self.config["tests"]["amb_thr"] else "light"
@@ -521,11 +530,7 @@ class TestBench:
     def t_serialn(self) -> bool:
         tc = TestCase("t_serialn")
         res = True
-        idn = self.config.get("dut").get("ident")
-        serial_date = self.config.get("dut").get("serial_date")
-        serialn = self.config.get("dut").get("serialn")
-        serial_separator =  self.config.get("dut").get("serial_separator")
-        snstr = idn + serial_separator + serial_date + serial_separator + serialn
+        snstr = self.form_serialn_string()
 
         if self.config["options"]["interactive"]:
             snstr = prompt("Serial number: ", default=snstr)
