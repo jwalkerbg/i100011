@@ -11,7 +11,7 @@ long_payload = 25                           # payload lenth threshod. Used in lo
 
 [mqttms.ms]
 client_uuid = "e6f87d77-4216-4be1-ab83-b5fa6792b747"    # Used as identifier of this application running on concrete computer
-server_uuid = "e8a5106c-9b8b-4040-b906-bbc466d2bc1f"    # UUID of DUT
+server_uuid = "f93e3068-40d5-45ba-b221-8dd6faa596dd"    # UUID of DUT    e8a5106c-9b8b-4040-b906-bbc466d2bc1f
 cmd_topic = "@/server_uuid/CMD/format"       # template of MS protocol command topic
 timeout = 5.0
 
@@ -30,11 +30,11 @@ use_color = true
 use_string_handler = false
 
 [dut]
-ident = "109380"                # identifier ot DUT brand
+ident = "150360"                # identifier of DUT brand
 name = "Smart Ventilator"       # Human readable name
 serial_date = "2606"            # year and moth or production
 serialn = "0000001"             # serial number
-serial_separator = "-"          # separator  betwennparts of the serial number
+serial_separator = "-"          # separator between parts of the serial number
 
 [tests]
 motoron = 3.0           # time to maintain motor in ON state in tests
