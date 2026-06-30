@@ -144,7 +144,7 @@ class TestBench:
         for test in testarray:
             logger.quiet("")
             logger.quiet("**** Test %s ****",test[1])
-            res = test[0]()
+            res = test[0](test[1])
             if res:
                 logger.quiet("**** Test %s: PASS",test[1])
             else:
@@ -174,8 +174,8 @@ class TestBench:
 
     # tests
 
-    def t_who_am_i(self) -> bool:
-        tc = TestCase("t_who_am_i")
+    def t_who_am_i(self, name: str) -> bool:
+        tc = TestCase(name)
 
         payload = self.ms_host.ms_who_am_i()
         if payload.get("response","") == "OK":
@@ -198,8 +198,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return False
 
-    def t_version(self) -> bool:
-        tc = TestCase("t_version")
+    def t_version(self, name: str) -> bool:
+        tc = TestCase(name)
         payload = self.ms_host.ms_version()
         if payload.get("response","") == "OK":
             jdata = payload.get('data', None)
@@ -220,8 +220,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return False
 
-    def t_testmode(self) -> bool:
-        tc = TestCase("t_testmode")
+    def t_testmode(self, name: str) -> bool:
+        tc = TestCase(name)
         payload = self.ms_host.ms_set_mode(DeviceMode.TEST)
         if payload.get("response","") == "OK":
             logger.quiet("Test mode is set")
@@ -235,8 +235,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return False
 
-    def t_sensors(self) -> bool:
-        tc = TestCase("t_sensors")
+    def t_sensors(self, name: str) -> bool:
+        tc = TestCase(name)
         TestBench.dev_state_event.clear()
 
         payload = self.ms_host.ms_sensors()
@@ -306,8 +306,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return tc.result
 
-    def t_leds(self) -> bool:
-        tc = TestCase("t_leds")
+    def t_leds(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         loops = self.config['tests']['ledloops']
         for loopnum in range(1, loops + 1):
@@ -338,8 +338,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return res
 
-    def t_heater(self) -> bool:
-        tc = TestCase("t_heater")
+    def t_heater(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         heateron = self.config.get("tests").get("heateron", 3.0)
         payload = self.ms_host.ms_output(Device.HEATER, DeviceAction.ON)
@@ -368,8 +368,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return True
 
-    def t_ionizer(self) -> bool:
-        tc = TestCase("t_ionizer")
+    def t_ionizer(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         ionizeron = self.config.get("tests").get("ionizeron", 3.0)
         payload = self.ms_host.ms_output(Device.IONIZER, DeviceAction.ON)
@@ -398,8 +398,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return True
 
-    def t_ultra_reppeler(self) -> bool:
-        tc = TestCase("t_ultra_reppeler")
+    def t_ultra_reppeler(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         repelleron = self.config.get("tests").get("repelleron", 3.0)
         payload = self.ms_host.ms_output(Device.ULTRA_REPELLER, DeviceAction.ON)
@@ -428,8 +428,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return True
 
-    def t_kbd_ir(self) -> bool:
-        tc = TestCase("t_kbd_ir")
+    def t_kbd_ir(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         TestBench.button_event.clear()
         TestBench.ir_event.clear()
@@ -467,8 +467,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return btnres and irres
 
-    def t_fan_in(self) -> bool:
-        tc = TestCase("t_fan_in")
+    def t_fan_in(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         motoron = self.config.get("tests").get("motoron", 3.0)
         motoroff = self.config.get("tests").get("motoroff", 1.0)
@@ -500,8 +500,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return res
 
-    def t_fan_out(self) -> bool:
-        tc = TestCase("t_fan_out")
+    def t_fan_out(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         motoron = self.config.get("tests").get("motoron", 3.0)
         motoroff = self.config.get("tests").get("motoroff", 1.0)
@@ -533,8 +533,8 @@ class TestBench:
         self.report.add_test_data(tc)
         return res
 
-    def t_serialn(self) -> bool:
-        tc = TestCase("t_serialn")
+    def t_serialn(self, name: str) -> bool:
+        tc = TestCase(name)
         res = True
         snstr = self.form_serialn_string()
 
@@ -557,7 +557,7 @@ class TestBench:
         self.report.add_test_data(tc)
         return res
 
-    def t_monitor(self) -> bool:
+    def t_monitor(self, name: str) -> bool:
         logger.info("Press Ctrl+C to stop monitoring")
         logger.setLevel(logging.WARNING)
         logging.getLogger("tbench_sma.core.ms_host").setLevel(logging.WARNING)
